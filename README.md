@@ -15,7 +15,7 @@ HARD |95.7 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)|95.7|96.
 ASTD |86.5 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)| 80.1|92.2|92.6
 ArsenTD-Lev|52.4 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)|51|58.9|59.4
 AJGT|93 (citation needed)| 83.6|94.1|93.8
-LABR||83||86.7
+LABR||83|85.9|86.7
 ArSaS|
 ANERcorp||78.4|84.2|81.9
 ARCD|-|EM:34.2 F1: 61.3||EM:30.6 F1: 62.7
