@@ -18,7 +18,7 @@ AJGT|93 (citation needed)| 83.6|94.1|93.8
 LABR||83|85.9|86.7
 ArSaS|
 ANERcorp||78.4|84.2|81.9
-ARCD|-|EM:34.2 F1: 61.3||EM:30.6 F1: 62.7
+ARCD|-|EM:34.2 F1: 61.3|EM:30.1 F1:61.2|EM:30.6 F1: 62.7
 
 *We would be extremly thankful if everyone can contibute to the Results table by adding more scores on different datasets*
 
