@@ -58,10 +58,10 @@ The ```araBERT_(initial_Demo_TF)_.ipynb``` Notebook is a small demo using the AJ
 ## Model Weights and Vocab Download
 Models | AraBERTv0.1 | AraBERTv1
 ---|:---:|:---:
-TensorFlow|Coming SOON | [Drive Link](https://drive.google.com/drive/folders/1GQr8ue04rsvkOO3GieYTWnCOmB3-CNJz?usp=drive_open)
-PyTorch| Coming SOON | Coming SOON
+TensorFlow|[Drive Link](https://drive.google.com/open?id=1-kVmTUZZ4DP2rzeHNjTPkY8OjnQCpomO) | [Drive Link](https://drive.google.com/open?id=1-d7-9ljKgDJP5mx73uBtio-TuUZCqZnt)
+PyTorch| [Drive_Link](https://drive.google.com/open?id=1-_3te42mQCPD8SxwZ3l-VBL7yaJH-IOv)| [Drive_Link](https://drive.google.com/open?id=1-69s6Pxqbi63HOQ1M9wTcr-Ovc6PWLLo)
 
-*You can find the PyTorch models in HuggingFace's Transformer Library under the ```aubmind``` username (SOON)*
+**You can find the PyTorch models in HuggingFace's Transformer Library under the ```aubmindlab``` username**
 
 ## If you used this model please cite us as:
 ```
