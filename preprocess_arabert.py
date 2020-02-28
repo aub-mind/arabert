@@ -94,8 +94,9 @@ def preprocess(text, do_farasa_tokenization=True , farasa=None):
 	processing_tweet = re.sub(r'\d+\/[ء-ي]+\/\d+\]', '', processing_tweet)
 	processing_tweet = re.sub('ـ', '', processing_tweet)	
 	processing_tweet = re.sub('[«»]', ' " ', processing_tweet)
-	processing_tweet = re.sub(regex_url_step1, ' ', processing_tweet)
-	processing_tweet = re.sub(regex_url_step2, ' ', processing_tweet)
+	#replace the [رابط] token with space if you want to clean links
+	processing_tweet = re.sub(regex_url_step1, '[رابط]', processing_tweet)
+	processing_tweet = re.sub(regex_url_step2, '[رابط]', processing_tweet)
 	processing_tweet = re.sub(regex_url, '[رابط]', processing_tweet)
 	processing_tweet = re.sub(regex_email, '[بريد]', processing_tweet)
 	processing_tweet = re.sub(regex_mention, '[مستخدم]', processing_tweet)
