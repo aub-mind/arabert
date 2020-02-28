@@ -24,12 +24,37 @@ ARCD|mBERT|EM:34.2 F1: 61.3|EM:30.1 F1:61.2|EM:30.6 F1: 62.7
 ## How to use
 
 You can easily use AraBERT since it is almost fully compatible with existing codebases (You can use this repo instead of the official BERT one, the only difference is in the ```tokenization.py``` file where we modify the _is_punctuation function to make it compatible with the "+" symbol and the "[" and "]" characters)
-**To use the [Transformers](https://github.com/huggingface/transformers) Library you can use [this FORK](https://github.com/WissamAntoun/transformers)** 
-**If you have a more elegant solution please contact us**
+
+To use HuggingFace's Transformer repository you only need to provide a lost of token that forces the model to not split them, also make sure that the text is pre-segmented:
+
+```
+from transformers import AutoTokenizer
+from preprocess_arabert import never_split_tokens
+
+arabert_tokenizer = AutoTokenizer.from_pretrained("aubmind/bert-base-arabert",do_lower_case=False,do_basic_tokenize=True,never_split=never_split_tokens)
+arabert_model = AutoModel.from_pretrained("aubmind/bert-base-arabert")
+
+arabert_tokenizer.tokenize("و+ لن نبالغ إذا قل +نا إن هاتف أو كمبيوتر ال+ مكتب في زمن +نا هذا ضروري")
+
+>>> ['و+', 'لن', 'نبال', '##غ', 'إذا', 'قل', '+نا', 'إن', 'هاتف', 'أو', 'كمبيوتر', 'ال+', 'مكتب', 'في', 'زمن', '+نا', 'هذا', 'ضروري']
+```
+
+
+**AraBERTv0.1 is compatible with all existing libraries, since it needs no pre-segmentation.**
+```
+from transformers import AutoTokenizer
+from preprocess_arabert import never_split_tokens
+
+arabert_tokenizer = AutoTokenizer.from_pretrained("aubmind/bert-base-arabertv01",do_lower_case=False)
+arabert_model = AutoModel.from_pretrained("aubmind/bert-base-arabertv01")
+
+arabert_tokenizer.tokenize("ولن نبالغ إذا قلنا إن هاتف أو كمبيوتر المكتب في زمننا هذا ضروري")
+
+>>> ['ولن', 'ن', '##بالغ', 'إذا', 'قلنا', 'إن', 'هاتف', 'أو', 'كمبيوتر', 'المكتب', 'في', 'زمن', '##ن', '##ا', 'هذا', 'ضروري']
+```
+
 
 The ```araBERT_(initial_Demo_TF)_.ipynb``` Notebook is a small demo using the AJGT dataset using TensorFlow (GPU and TPU compatible).
-
-The ```araBERT_(initial_Demo_Transformers)_.ipynb``` Notebook is another demo using the AJGT dataset using Transformers from HuggingFace (GPU and TPU compatible).
 
 ## Model Weights and Vocab Download
 Models | AraBERTv0.1 | AraBERTv1
