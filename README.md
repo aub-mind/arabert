@@ -27,7 +27,7 @@ You can easily use AraBERT since it is almost fully compatible with existing cod
 
 To use HuggingFace's Transformer repository you only need to provide a lost of token that forces the model to not split them, also make sure that the text is pre-segmented:
 
-```
+```python
 from transformers import AutoTokenizer
 from preprocess_arabert import never_split_tokens
 
@@ -39,9 +39,8 @@ arabert_tokenizer.tokenize("و+ لن نبالغ إذا قل +نا إن هاتف 
 >>> ['و+', 'لن', 'نبال', '##غ', 'إذا', 'قل', '+نا', 'إن', 'هاتف', 'أو', 'كمبيوتر', 'ال+', 'مكتب', 'في', 'زمن', '+نا', 'هذا', 'ضروري']
 ```
 
-
 **AraBERTv0.1 is compatible with all existing libraries, since it needs no pre-segmentation.**
-```
+```python
 from transformers import AutoTokenizer
 from preprocess_arabert import never_split_tokens
 
