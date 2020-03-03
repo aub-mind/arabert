@@ -31,7 +31,11 @@ To use HuggingFace's Transformer repository you only need to provide a lost of t
 from transformers import AutoTokenizer
 from preprocess_arabert import never_split_tokens
 
-arabert_tokenizer = AutoTokenizer.from_pretrained("aubmindlab/bert-base-arabert",do_lower_case=False,do_basic_tokenize=True,never_split=never_split_tokens)
+arabert_tokenizer = AutoTokenizer.from_pretrained(
+    "aubmindlab/bert-base-arabert",
+    do_lower_case=False,
+    do_basic_tokenize=True,
+    never_split=never_split_tokens)
 arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabert")
 
 arabert_tokenizer.tokenize("و+ لن نبالغ إذا قل +نا إن هاتف أو كمبيوتر ال+ مكتب في زمن +نا هذا ضروري")
