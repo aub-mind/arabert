@@ -65,7 +65,14 @@ PyTorch| [Drive_Link](https://drive.google.com/open?id=1-_3te42mQCPD8SxwZ3l-VBL7
 
 ## If you used this model please cite us as:
 ```
-@comingsoon{just couldnt get the paper finished on time XD}
+@misc{antoun2020arabert,
+    title={AraBERT: Transformer-based Model for Arabic Language Understanding},
+    author={Wissam Antoun and Fady Baly and Hazem Hajj},
+    year={2020},
+    eprint={2003.00104},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL}
+}
 ```
 ## Acknowledgments 
 Thanks to TensorFlow Research Cloud (TFRC) for the free access to Cloud TPUs, couldn't have done it without this program, and to the [AUB MIND Lab](https://sites.aub.edu.lb/mindlab/) Members for the continous support. Also thanks to [Yakshof](https://www.yakshof.com/#/) and Assafir for data and storage access.
