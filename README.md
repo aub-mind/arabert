@@ -32,7 +32,8 @@ To use HuggingFace's Transformer repository you only need to provide a lost of t
 
 ```python
 from transformers import AutoTokenizer
-from preprocess_arabert import never_split_tokens
+from preprocess_arabert import never_split_tokens, preprocess
+from py4j.java_gateway import JavaGateway
 
 arabert_tokenizer = AutoTokenizer.from_pretrained(
     "aubmindlab/bert-base-arabert",
@@ -41,7 +42,17 @@ arabert_tokenizer = AutoTokenizer.from_pretrained(
     never_split=never_split_tokens)
 arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabert")
 
-arabert_tokenizer.tokenize("و+ لن نبالغ إذا قل +نا إن هاتف أو كمبيوتر ال+ مكتب في زمن +نا هذا ضروري")
+#Preprocess the text to make it compatible with AraBERT
+
+gateway = JavaGateway.launch_gateway(classpath='./PATH_TO_FARASA/FarasaSegmenterJar.jar')
+farasa = gateway.jvm.com.qcri.farasa.segmenter.Farasa()
+
+text = "ولن نبالغ إذا قلنا إن هاتف أو كمبيوتر المكتب في زمننا هذا ضروري"
+text_preprocessed = preprocess(text, do_farasa_tokenization=True , farasa=farasa)
+
+>>>text_preprocessed: "و+ لن نبالغ إذا قل +نا إن هاتف أو كمبيوتر ال+ مكتب في زمن +نا هذا ضروري"
+
+arabert_tokenizer.tokenize(text_preprocessed)
 
 >>> ['و+', 'لن', 'نبال', '##غ', 'إذا', 'قل', '+نا', 'إن', 'هاتف', 'أو', 'كمبيوتر', 'ال+', 'مكتب', 'في', 'زمن', '+نا', 'هذا', 'ضروري']
 ```
@@ -49,12 +60,12 @@ arabert_tokenizer.tokenize("و+ لن نبالغ إذا قل +نا إن هاتف 
 **AraBERTv0.1 is compatible with all existing libraries, since it needs no pre-segmentation.**
 ```python
 from transformers import AutoTokenizer
-from preprocess_arabert import never_split_tokens
 
 arabert_tokenizer = AutoTokenizer.from_pretrained("aubmindlab/bert-base-arabertv01",do_lower_case=False)
 arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabertv01")
 
-arabert_tokenizer.tokenize("ولن نبالغ إذا قلنا إن هاتف أو كمبيوتر المكتب في زمننا هذا ضروري")
+text = "ولن نبالغ إذا قلنا إن هاتف أو كمبيوتر المكتب في زمننا هذا ضروري"
+arabert_tokenizer.tokenize(text)
 
 >>> ['ولن', 'ن', '##بالغ', 'إذا', 'قلنا', 'إن', 'هاتف', 'أو', 'كمبيوتر', 'المكتب', 'في', 'زمن', '##ن', '##ا', 'هذا', 'ضروري']
 ```
