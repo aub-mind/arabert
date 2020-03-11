@@ -71,7 +71,7 @@ arabert_tokenizer.tokenize(text)
 ```
 
 
-The ```araBERT_(initial_Demo_TF)_.ipynb``` Notebook is a small demo using the AJGT dataset using TensorFlow (GPU and TPU compatible).
+The ```araBERT_(Updated_Demo_TF).ipynb``` Notebook is a small demo using the AJGT dataset using TensorFlow (GPU and TPU compatible).
 
 ## Model Weights and Vocab Download
 Models | AraBERTv0.1 | AraBERTv1
