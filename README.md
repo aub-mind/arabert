@@ -28,8 +28,8 @@ ARCD|mBERT|EM:34.2 F1: 61.3|EM:30.1 F1:61.2|EM:30.6 F1: 62.7
 
 You can easily use AraBERT since it is almost fully compatible with existing codebases (You can use this repo instead of the official BERT one, the only difference is in the ```tokenization.py``` file where we modify the _is_punctuation function to make it compatible with the "+" symbol and the "[" and "]" characters)
 
-To use HuggingFace's Transformer repository you only need to provide a lost of token that forces the model to not split them, also make sure that the text is pre-segmented:
-
+To use HuggingFace's Transformer repository you only need to provide a list of token that forces the model to not split them, also make sure that the text is pre-segmented:
+**Not all libraries built on top of transformers support the `never_split` argument**
 ```python
 from transformers import AutoTokenizer
 from preprocess_arabert import never_split_tokens, preprocess
