@@ -31,7 +31,7 @@ You can easily use AraBERT since it is almost fully compatible with existing cod
 To use HuggingFace's Transformer repository you only need to provide a list of token that forces the model to not split them, also make sure that the text is pre-segmented:
 **Not all libraries built on top of transformers support the `never_split` argument**
 ```python
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, AutoModel
 from preprocess_arabert import never_split_tokens, preprocess
 from py4j.java_gateway import JavaGateway
 
@@ -59,7 +59,7 @@ arabert_tokenizer.tokenize(text_preprocessed)
 
 **AraBERTv0.1 is compatible with all existing libraries, since it needs no pre-segmentation.**
 ```python
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, AutoModel
 
 arabert_tokenizer = AutoTokenizer.from_pretrained("aubmindlab/bert-base-arabertv01",do_lower_case=False)
 arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabertv01")
