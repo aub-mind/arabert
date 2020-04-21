@@ -1,8 +1,5 @@
 # AraBERT : Pre-training BERT for Arabic Language Understanding
 <img src="https://github.com/aub-mind/arabert/blob/master/arabert_logo.png" width="100" align="left"/>  
-
-
-
 **AraBERT** is an Arabic pretrained lanaguage model based on [Google's BERT architechture](https://github.com/google-research/bert). AraBERT uses the same BERT-Base config. More details are available in the [AraBERT PAPER](https://arxiv.org/abs/2003.00104v2)
 
 There are two version off the model AraBERTv0.1 and AraBERTv1, with the difference being that AraBERTv1 uses pre-segmented text where prefixes and suffixes were splitted using the [Farasa Segmenter](http://alt.qcri.org/farasa/segmenter.html).
@@ -11,6 +8,8 @@ The model was trained on ~70M sentences or ~23GB of Arabic text with ~3B words. 
 
 We evalaute both AraBERT models on different downstream tasks and compare it to [mBERT]((https://github.com/google-research/bert/blob/master/multilingual.md)), and other state of the art models (*To the extent of our knowledge*). The Tasks were Sentiment Analysis on 6 different datasets ([HARD](https://github.com/elnagara/HARD-Arabic-Dataset), [ASTD-Balanced](https://www.aclweb.org/anthology/D15-1299), [ArsenTD-Lev](https://staff.aub.edu.lb/~we07/Publications/ArSentD-LEV_Sentiment_Corpus.pdf), [LABR](https://github.com/mohamedadaly/LABR), [ArSaS](http://lrec-conf.org/workshops/lrec2018/W30/pdf/22_W30.pdf)), Named Entity Recognition with the [ANERcorp](http://curtis.ml.cmu.edu/w/courses/index.php/ANERcorp), and Arabic Question Answering on [Arabic-SQuAD and ARCD](https://github.com/husseinmozannar/SOQAL)
 
+**Update 1 (21/4/2020) :** 
+Fixed an issue with ARCD fine-tuning which drastically improved performance. Initially we didn't account for the change of the ```answer_start``` during preprocessing.
 ## Results (Acc.)
 Task | prev. SOTA | mBERT | AraBERTv0.1 | AraBERTv1
 ---|:---:|:---:|:---:|:---:
@@ -20,7 +19,7 @@ ArsenTD-Lev|52.4 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)|51
 AJGT|93 [Dahou et.al.](https://dl.acm.org/doi/fullHtml/10.1145/3314941)| 83.6|93.1|**93.8**
 LABR|87.5 [Dahou et.al.](https://dl.acm.org/doi/fullHtml/10.1145/3314941)|83|85.9|**86.7**
 ANERcorp|81.7 (BiLSTM-CRF)|78.4|**84.2**|81.9
-ARCD|mBERT|**EM:34.2** F1: 61.3|EM:30.1 F1:61.2|EM:30.6 **F1: 62.7**
+ARCD|mBERT|EM:34.2 F1: 61.3|EM:51.14 F1:82.13|**EM:54.84 F1: 82.15**
 
 *We would be extremly thankful if everyone can contibute to the Results table by adding more scores on different datasets*
 
@@ -73,6 +72,35 @@ arabert_tokenizer.tokenize(text)
 
 The ```araBERT_(Updated_Demo_TF).ipynb``` Notebook is a small demo using the AJGT dataset using TensorFlow (GPU and TPU compatible).
 
+**AraBERT on ARCD**
+During the preprocessing step the ```answer_start``` character position needs to be recalculated. You can use the file ```arcd_preprocessing.py``` as shown below to clean, preprocess the ARCD dataset before running ```run_squad.py```. More detailed Colab notebook is available in the [SOQAL repo](https://github.com/husseinmozannar/SOQAL).
+```python
+python arcd_preprocessing.py \
+    --input_file="/PATH_TO/arcd-test.json" \
+    --output_file="arcd-test-pre.json" \
+    --do_farasa_tokenization=True \
+    --path_to_farasa="/PATH_TO/FarasaSegmenterJar.jar" 
+```
+```python
+!python SOQAL/bert/run_squad.py \
+  --vocab_file="/PATH_TO/tf_arabert/vocab.txt" \
+  --bert_config_file="/PATH_TO/tf_arabert/config.json" \
+  --init_checkpoint=$model_dir \
+  --do_train=True \
+  --train_file=turk_combined_all_pre.json \
+  --do_predict=True \
+  --predict_file=arcd-test-pre.json \
+  --train_batch_size=32 \
+  --predict_batch_size=24 \
+  --learning_rate=3e-5 \
+  --num_train_epochs=4 \
+  --max_seq_length=384 \
+  --doc_stride=128 \
+  --do_lower_case=False\
+  --output_dir=gs://bert_pretrain5/arabic_squad_train/ \
+  --use_tpu=True \
+  --tpu_name=$TPU_ADDRESS \
+```
 ## Model Weights and Vocab Download
 Models | AraBERTv0.1 | AraBERTv1
 ---|:---:|:---:
