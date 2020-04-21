@@ -74,15 +74,15 @@ The ```araBERT_(Updated_Demo_TF).ipynb``` Notebook is a small demo using the AJG
 
 **AraBERT on ARCD**
 During the preprocessing step the ```answer_start``` character position needs to be recalculated. You can use the file ```arcd_preprocessing.py``` as shown below to clean, preprocess the ARCD dataset before running ```run_squad.py```. More detailed Colab notebook is available in the [SOQAL repo](https://github.com/husseinmozannar/SOQAL).
-```python
+```bash
 python arcd_preprocessing.py \
     --input_file="/PATH_TO/arcd-test.json" \
     --output_file="arcd-test-pre.json" \
     --do_farasa_tokenization=True \
     --path_to_farasa="/PATH_TO/FarasaSegmenterJar.jar" 
 ```
-```python
-!python SOQAL/bert/run_squad.py \
+```bash
+python SOQAL/bert/run_squad.py \
   --vocab_file="/PATH_TO/tf_arabert/vocab.txt" \
   --bert_config_file="/PATH_TO/tf_arabert/config.json" \
   --init_checkpoint=$model_dir \
