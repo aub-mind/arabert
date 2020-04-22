@@ -1,5 +1,5 @@
 # AraBERT : Pre-training BERT for Arabic Language Understanding
-<img src="https://github.com/aub-mind/arabert/blob/master/arabert_logo.png" width="100" align="left"/>  
+<img src="https://github.com/aub-mind/arabert/blob/master/arabert_logo.png" width="100" align="left"/>
 **AraBERT** is an Arabic pretrained lanaguage model based on [Google's BERT architechture](https://github.com/google-research/bert). AraBERT uses the same BERT-Base config. More details are available in the [AraBERT PAPER](https://arxiv.org/abs/2003.00104v2)
 
 There are two version off the model AraBERTv0.1 and AraBERTv1, with the difference being that AraBERTv1 uses pre-segmented text where prefixes and suffixes were splitted using the [Farasa Segmenter](http://alt.qcri.org/farasa/segmenter.html).
@@ -72,7 +72,8 @@ arabert_tokenizer.tokenize(text)
 
 The ```araBERT_(Updated_Demo_TF).ipynb``` Notebook is a small demo using the AJGT dataset using TensorFlow (GPU and TPU compatible).
 
-**AraBERT on ARCD**
+**AraBERT on ARCD :**
+
 During the preprocessing step the ```answer_start``` character position needs to be recalculated. You can use the file ```arcd_preprocessing.py``` as shown below to clean, preprocess the ARCD dataset before running ```run_squad.py```. More detailed Colab notebook is available in the [SOQAL repo](https://github.com/husseinmozannar/SOQAL).
 ```bash
 python arcd_preprocessing.py \
@@ -97,7 +98,7 @@ python SOQAL/bert/run_squad.py \
   --max_seq_length=384 \
   --doc_stride=128 \
   --do_lower_case=False\
-  --output_dir=gs://bert_pretrain5/arabic_squad_train/ \
+  --output_dir=$output_dir \
   --use_tpu=True \
   --tpu_name=$TPU_ADDRESS \
 ```
