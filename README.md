@@ -1,6 +1,6 @@
 # AraBERT : Pre-training BERT for Arabic Language Understanding
-<img src="https://github.com/aub-mind/arabert/blob/master/arabert_logo.png" width="100" align="left"/>
-**AraBERT** is an Arabic pretrained lanaguage model based on [Google's BERT architechture](https://github.com/google-research/bert). AraBERT uses the same BERT-Base config. More details are available in the [AraBERT PAPER](https://arxiv.org/abs/2003.00104v2)
+<img src="https://github.com/aub-mind/arabert/blob/master/arabert_logo.png" width="100" align="left"/>  
+**AraBERT** is an Arabic pretrained lanaguage model based on [Google's BERT architechture](https://github.com/google-research/bert). AraBERT uses the same BERT-Base config. More details are available in the [AraBERT PAPER](https://arxiv.org/abs/2003.00104v2) and in the [AraBERT Meetup](https://github.com/WissamAntoun/pydata_khobar_meetup)
 
 There are two version off the model AraBERTv0.1 and AraBERTv1, with the difference being that AraBERTv1 uses pre-segmented text where prefixes and suffixes were splitted using the [Farasa Segmenter](http://alt.qcri.org/farasa/segmenter.html).
 
@@ -21,17 +21,17 @@ LABR|87.5 [Dahou et.al.](https://dl.acm.org/doi/fullHtml/10.1145/3314941)|83|85.
 ANERcorp|81.7 (BiLSTM-CRF)|78.4|**84.2**|81.9
 ARCD|mBERT|EM:34.2 F1: 61.3|EM:51.14 F1:82.13|**EM:54.84 F1: 82.15**
 
-*We would be extremly thankful if everyone can contibute to the Results table by adding more scores on different datasets*
+*If you tested AraBERT on a public dataset and you want to add your results to the table above, open a pull request or contact us. Also make sure to have your code available online so we can add it as a reference*
 
 ## How to use
 
-You can easily use AraBERT since it is almost fully compatible with existing codebases (You can use this repo instead of the official BERT one, the only difference is in the ```tokenization.py``` file where we modify the _is_punctuation function to make it compatible with the "+" symbol and the "[" and "]" characters)
+You can easily use AraBERT since it is almost fully compatible with existing codebases (Use this repo instead of the official BERT one, the only difference is in the ```tokenization.py``` file where we modify the _is_punctuation function to make it compatible with the "+" symbol and the "[" and "]" characters)
 
 To use HuggingFace's Transformer repository you only need to provide a list of token that forces the model to not split them, also make sure that the text is pre-segmented:
 **Not all libraries built on top of transformers support the `never_split` argument**
 ```python
 from transformers import AutoTokenizer, AutoModel
-from preprocess_arabert import never_split_tokens, preprocess
+from arabert.preprocess_arabert import never_split_tokens, preprocess
 from py4j.java_gateway import JavaGateway
 
 arabert_tokenizer = AutoTokenizer.from_pretrained(
@@ -72,8 +72,7 @@ arabert_tokenizer.tokenize(text)
 
 The ```araBERT_(Updated_Demo_TF).ipynb``` Notebook is a small demo using the AJGT dataset using TensorFlow (GPU and TPU compatible).
 
-**AraBERT on ARCD :**
-
+**AraBERT on ARCD**
 During the preprocessing step the ```answer_start``` character position needs to be recalculated. You can use the file ```arcd_preprocessing.py``` as shown below to clean, preprocess the ARCD dataset before running ```run_squad.py```. More detailed Colab notebook is available in the [SOQAL repo](https://github.com/husseinmozannar/SOQAL).
 ```bash
 python arcd_preprocessing.py \
@@ -84,9 +83,9 @@ python arcd_preprocessing.py \
 ```
 ```bash
 python SOQAL/bert/run_squad.py \
-  --vocab_file="/PATH_TO/tf_arabert/vocab.txt" \
-  --bert_config_file="/PATH_TO/tf_arabert/config.json" \
-  --init_checkpoint=$model_dir \
+  --vocab_file="/PATH_TO_PRETRAINED_TF_CKPT/vocab.txt" \
+  --bert_config_file="/PATH_TO_PRETRAINED_TF_CKPT/config.json" \
+  --init_checkpoint="/PATH_TO_PRETRAINED_TF_CKPT/" \
   --do_train=True \
   --train_file=turk_combined_all_pre.json \
   --do_predict=True \
@@ -98,7 +97,7 @@ python SOQAL/bert/run_squad.py \
   --max_seq_length=384 \
   --doc_stride=128 \
   --do_lower_case=False\
-  --output_dir=$output_dir \
+  --output_dir="/PATH_TO/OUTPUT_PATH"/ \
   --use_tpu=True \
   --tpu_name=$TPU_ADDRESS \
 ```
@@ -112,13 +111,11 @@ PyTorch| [Drive_Link](https://drive.google.com/open?id=1-_3te42mQCPD8SxwZ3l-VBL7
 
 ## If you used this model please cite us as:
 ```
-@misc{antoun2020arabert,
-    title={AraBERT: Transformer-based Model for Arabic Language Understanding},
-    author={Wissam Antoun and Fady Baly and Hazem Hajj},
-    year={2020},
-    eprint={2003.00104},
-    archivePrefix={arXiv},
-    primaryClass={cs.CL}
+@inproceedings{antoun2020arabert,
+  title={AraBERT: Transformer-based Model for Arabic Language Understanding},
+  author={Antoun, Wissam and Baly, Fady and Hajj, Hazem},
+  booktitle={LREC 2020 Workshop Language Resources and Evaluation Conference 11--16 May 2020},
+  pages={9}
 }
 ```
 ## Acknowledgments 
