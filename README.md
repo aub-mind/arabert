@@ -1,5 +1,6 @@
 # AraBERT : Pre-training BERT for Arabic Language Understanding
 <img src="https://github.com/aub-mind/arabert/blob/master/arabert_logo.png" width="100" align="left"/>  
+
 **AraBERT** is an Arabic pretrained lanaguage model based on [Google's BERT architechture](https://github.com/google-research/bert). AraBERT uses the same BERT-Base config. More details are available in the [AraBERT PAPER](https://arxiv.org/abs/2003.00104v2) and in the [AraBERT Meetup](https://github.com/WissamAntoun/pydata_khobar_meetup)
 
 There are two version off the model AraBERTv0.1 and AraBERTv1, with the difference being that AraBERTv1 uses pre-segmented text where prefixes and suffixes were splitted using the [Farasa Segmenter](http://alt.qcri.org/farasa/segmenter.html).
@@ -7,6 +8,9 @@ There are two version off the model AraBERTv0.1 and AraBERTv1, with the differen
 The model was trained on ~70M sentences or ~23GB of Arabic text with ~3B words. The training corpora are a collection of publically available large scale raw arabic text ([Arabic Wikidumps](https://archive.org/details/arwiki-20190201), [The 1.5B words Arabic Corpus](https://www.semanticscholar.org/paper/1.5-billion-words-Arabic-Corpus-El-Khair/f3eeef4afb81223df96575adadf808fe7fe440b4), [The OSIAN Corpus](https://www.aclweb.org/anthology/W19-4619), Assafir news articles, and 4 other manually crawled news websites (Al-Akhbar, Annahar, AL-Ahram, AL-Wafd) from [the Wayback Machine](http://web.archive.org/))
 
 We evalaute both AraBERT models on different downstream tasks and compare it to [mBERT]((https://github.com/google-research/bert/blob/master/multilingual.md)), and other state of the art models (*To the extent of our knowledge*). The Tasks were Sentiment Analysis on 6 different datasets ([HARD](https://github.com/elnagara/HARD-Arabic-Dataset), [ASTD-Balanced](https://www.aclweb.org/anthology/D15-1299), [ArsenTD-Lev](https://staff.aub.edu.lb/~we07/Publications/ArSentD-LEV_Sentiment_Corpus.pdf), [LABR](https://github.com/mohamedadaly/LABR), [ArSaS](http://lrec-conf.org/workshops/lrec2018/W30/pdf/22_W30.pdf)), Named Entity Recognition with the [ANERcorp](http://curtis.ml.cmu.edu/w/courses/index.php/ANERcorp), and Arabic Question Answering on [Arabic-SQuAD and ARCD](https://github.com/husseinmozannar/SOQAL)
+
+**Update 2 (21/5/2020) :**
+Added support for the farasapy segmenter https://github.com/MagedSaeed/farasapy in the ``preprocess_arabert.py`` which is ~6x faster than the ``py4j.java_gateway``, consider setting ``use_farasapy=True`` when calling preprocess and pass it an instance of ``FarasaSegmenter(interactive=True)`` with interactive set to ``True`` for faster segmentation.
 
 **Update 1 (21/4/2020) :** 
 Fixed an issue with ARCD fine-tuning which drastically improved performance. Initially we didn't account for the change of the ```answer_start``` during preprocessing.
@@ -17,7 +21,7 @@ HARD |95.7 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)|95.7|**9
 ASTD |86.5 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)| 80.1|92.2|**92.6**
 ArsenTD-Lev|52.4 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)|51|58.9|**59.4**
 AJGT|93 [Dahou et.al.](https://dl.acm.org/doi/fullHtml/10.1145/3314941)| 83.6|93.1|**93.8**
-LABR|87.5 [Dahou et.al.](https://dl.acm.org/doi/fullHtml/10.1145/3314941)|83|85.9|**86.7**
+LABR|**87.5** [Dahou et.al.](https://dl.acm.org/doi/fullHtml/10.1145/3314941)|83|85.9|86.7
 ANERcorp|81.7 (BiLSTM-CRF)|78.4|**84.2**|81.9
 ARCD|mBERT|EM:34.2 F1: 61.3|EM:51.14 F1:82.13|**EM:54.84 F1: 82.15**
 
@@ -32,7 +36,7 @@ To use HuggingFace's Transformer repository you only need to provide a list of t
 ```python
 from transformers import AutoTokenizer, AutoModel
 from arabert.preprocess_arabert import never_split_tokens, preprocess
-from py4j.java_gateway import JavaGateway
+from farasa.segmenter import FarasaSegmenter
 
 arabert_tokenizer = AutoTokenizer.from_pretrained(
     "aubmindlab/bert-base-arabert",
@@ -41,13 +45,20 @@ arabert_tokenizer = AutoTokenizer.from_pretrained(
     never_split=never_split_tokens)
 arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabert")
 
-#Preprocess the text to make it compatible with AraBERT
+#Preprocess the text to make it compatible with AraBERT using farasapy
+farasa_segmenter = FarasaSegmenter(interactive=True)
 
-gateway = JavaGateway.launch_gateway(classpath='./PATH_TO_FARASA/FarasaSegmenterJar.jar')
-farasa = gateway.jvm.com.qcri.farasa.segmenter.Farasa()
+#or you can use a py4j JavaGateway to the farasa Segmneter .jar but it's slower 
+#(see update 2)
+#from py4j.java_gateway import JavaGateway
+#gateway = JavaGateway.launch_gateway(classpath='./PATH_TO_FARASA/FarasaSegmenterJar.jar')
+#farasa = gateway.jvm.com.qcri.farasa.segmenter.Farasa()
 
 text = "ولن نبالغ إذا قلنا إن هاتف أو كمبيوتر المكتب في زمننا هذا ضروري"
-text_preprocessed = preprocess(text, do_farasa_tokenization=True , farasa=farasa)
+text_preprocessed = preprocess( text,
+                                do_farasa_tokenization = True,
+                                farasa = farasa_segmenter,
+                                use_farasapy = True)
 
 >>>text_preprocessed: "و+ لن نبالغ إذا قل +نا إن هاتف أو كمبيوتر ال+ مكتب في زمن +نا هذا ضروري"
 
@@ -72,6 +83,8 @@ arabert_tokenizer.tokenize(text)
 
 The ```araBERT_(Updated_Demo_TF).ipynb``` Notebook is a small demo using the AJGT dataset using TensorFlow (GPU and TPU compatible).
 
+**Coming Soon :** Fine-tunning demo using HuggingFace's Trainer API
+
 **AraBERT on ARCD**
 During the preprocessing step the ```answer_start``` character position needs to be recalculated. You can use the file ```arcd_preprocessing.py``` as shown below to clean, preprocess the ARCD dataset before running ```run_squad.py```. More detailed Colab notebook is available in the [SOQAL repo](https://github.com/husseinmozannar/SOQAL).
 ```bash
@@ -79,7 +92,7 @@ python arcd_preprocessing.py \
     --input_file="/PATH_TO/arcd-test.json" \
     --output_file="arcd-test-pre.json" \
     --do_farasa_tokenization=True \
-    --path_to_farasa="/PATH_TO/FarasaSegmenterJar.jar" 
+    --use_farasapy=True \
 ```
 ```bash
 python SOQAL/bert/run_squad.py \

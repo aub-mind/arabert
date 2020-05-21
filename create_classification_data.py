@@ -10,9 +10,11 @@ import sys
 sys.path.append("arabert")
 from arabert import modeling, optimization, tokenization
 from arabert.run_classifier import input_fn_builder, model_fn_builder
+from farasa.segmenter import FarasaSegmenter
 
-gateway = JavaGateway.launch_gateway(classpath='./PATH_TO_FARASA/FarasaSegmenterJar.jar')
-farasa = gateway.jvm.com.qcri.farasa.segmenter.Farasa()
+farasa_segmenter = FarasaSegmenter(interactive=True)
+# gateway = JavaGateway.launch_gateway(classpath='./PATH_TO_FARASA/FarasaSegmenterJar.jar')
+# farasa = gateway.jvm.com.qcri.farasa.segmenter.Farasa()
 
 class Dataset():
     def __init__(self, name,train,test,label_list,
@@ -36,7 +38,7 @@ df_HARD = df_HARD[['rating', 'review']] # we are interested in rating and review
 df_HARD['rating'] = df_HARD['rating'].apply(lambda x: 0 if x < 3 else 1)
 # rename columns to fit default constructor in fastai
 df_HARD.columns = ['label', 'text']
-df_HARD['text'] = df_HARD['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa))
+df_HARD['text'] = df_HARD['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa_segmenter , use_farasapy=True))
 train_HARD, test_HARD = train_test_split(df_HARD, test_size=0.2,random_state=42)
 label_list_HARD = [0, 1]
 
@@ -55,7 +57,7 @@ df_ASTD_UN[LABEL_COLUMN] = df_ASTD_UN[LABEL_COLUMN].apply(lambda x: 0 if (x=='NE
 df_ASTD_UN[LABEL_COLUMN] = df_ASTD_UN[LABEL_COLUMN].apply(lambda x: 1 if (x=='POS') else x)
 df_ASTD_UN[LABEL_COLUMN] = df_ASTD_UN[LABEL_COLUMN].apply(lambda x: 2 if (x=='NEUTRAL') else x)
 df_ASTD_UN[LABEL_COLUMN] = df_ASTD_UN[LABEL_COLUMN].apply(lambda x: 3 if (x=='OBJ') else x)
-df_ASTD_UN['text'] = df_ASTD_UN['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa))
+df_ASTD_UN['text'] = df_ASTD_UN['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa_segmenter , use_farasapy=True))
 train_ASTD_UN, test_ASTD_UN = train_test_split(df_ASTD_UN, test_size=0.2,random_state=42)
 label_list_ASTD_UN = [0, 1, 2, 3]
 
@@ -69,7 +71,7 @@ df_ASTD_B = pd.read_csv('Datasets\\Dahou\\data_csv_balanced\\ASTD-balanced-not-l
 df_ASTD_B.columns = [DATA_COLUMN, LABEL_COLUMN]
 
 df_ASTD_B[LABEL_COLUMN] = df_ASTD_B[LABEL_COLUMN].apply(lambda x: 0 if (x==-1) else x)
-df_ASTD_B['text'] = df_ASTD_B['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa))
+df_ASTD_B['text'] = df_ASTD_B['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa_segmenter , use_farasapy=True))
 train_ASTD_B, test_ASTD_B = train_test_split(df_ASTD_B, test_size=0.2,random_state=42)
 label_list_ASTD_B = [0, 1]
 
@@ -87,7 +89,7 @@ df_ArSenTD[LABEL_COLUMN] = df_ArSenTD[LABEL_COLUMN].apply(lambda x: 1 if (x=='ne
 df_ArSenTD[LABEL_COLUMN] = df_ArSenTD[LABEL_COLUMN].apply(lambda x: 2 if (x=='neutral') else x)
 df_ArSenTD[LABEL_COLUMN] = df_ArSenTD[LABEL_COLUMN].apply(lambda x: 3 if (x=='positive') else x)
 df_ArSenTD[LABEL_COLUMN] = df_ArSenTD[LABEL_COLUMN].apply(lambda x: 4 if (x=='very_positive') else x)
-df_ArSenTD['text'] = df_ArSenTD['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa))
+df_ArSenTD['text'] = df_ArSenTD['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa_segmenter , use_farasapy=True))
 label_list_ArSenTD = [0, 1, 2,3,4]
 
 train_ArSenTD, test_ArSenTD = train_test_split(df_ArSenTD, test_size=0.2,random_state=42)
@@ -104,7 +106,7 @@ df_AJGT.columns = [DATA_COLUMN, LABEL_COLUMN]
 
 df_AJGT[LABEL_COLUMN] = df_AJGT[LABEL_COLUMN].apply(lambda x: 0 if (x=='Negative') else x)
 df_AJGT[LABEL_COLUMN] = df_AJGT[LABEL_COLUMN].apply(lambda x: 1 if (x=='Positive') else x)
-df_AJGT['text'] = df_AJGT['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa))
+df_AJGT['text'] = df_AJGT['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa_segmenter , use_farasapy=True))
 train_AJGT, test_AJGT = train_test_split(df_AJGT, test_size=0.2,random_state=42)
 label_list_AJGT = [0, 1]
 
@@ -121,31 +123,22 @@ labr_helper = LABR()
 train_LABR_B_U = pd.DataFrame({'text':d_train,'label':y_train})
 test_LABR_B_U = pd.DataFrame({'text':d_test,'label':y_test})
 
-train_LABR_B_U['text'] = train_LABR_B_U['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa))
-test_LABR_B_U['text'] = test_LABR_B_U['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa))
+train_LABR_B_U['text'] = train_LABR_B_U['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa_segmenter , use_farasapy=True))
+test_LABR_B_U['text'] = test_LABR_B_U['text'].progress_apply(lambda x: preprocess(x, do_farasa_tokenization=True , farasa=farasa_segmenter , use_farasapy=True))
 label_list_LABR_B_U = [0, 1]
 
 data_LABR_B_U = Dataset("LABR-UN-Binary",train_LABR_B_U,test_LABR_B_U,label_list_LABR_B_U)
 #all_datasets.append(data_LABR_B_U)
 
 #%%
-
-from sklearn.preprocessing import OneHotEncoder
-# creating instance of one-hot-encoder
-enc = OneHotEncoder(handle_unknown='ignore')
-# passing bridge-types-cat column (label encoded values of bridge_types)
-enc_df = pd.DataFrame(enc.fit_transform(df_arsas_filtered[['Sentiment_label']]).toarray())
-enc_df.columns = ['Negative' , 'Neutral', 'Positive']
-
-#%%
 for data in tqdm(all_datasets):
     # Use the InputExample class from BERT's run_classifier code to create examples from the data
-    data.train_InputExamples = data.train.apply(lambda x: bert.run_classifier.InputExample(guid=None, # Globally unique ID for bookkeeping, unused in this example
+    data.train_InputExamples = data.train.apply(lambda x: arabert.run_classifier.InputExample(guid=None, # Globally unique ID for bookkeeping, unused in this example
                                                                     text_a = x[DATA_COLUMN], 
                                                                     text_b = None, 
                                                                     label = x[LABEL_COLUMN]), axis = 1)
 
-    data.test_InputExamples = data.test.apply(lambda x: bert.run_classifier.InputExample(guid=None, 
+    data.test_InputExamples = data.test.apply(lambda x: arabert.run_classifier.InputExample(guid=None, 
                                                                     text_a = x[DATA_COLUMN], 
                                                                     text_b = None, 
                                                                     label = x[LABEL_COLUMN]), axis = 1)
@@ -158,8 +151,8 @@ tokenizer = tokenization.FullTokenizer(VOC_FNAME)
 
 for data in tqdm(all_datasets):
     # Convert our train and test features to InputFeatures that BERT understands.
-    data.train_features = bert.run_classifier.convert_examples_to_features(data.train_InputExamples, data.label_list, MAX_SEQ_LENGTH, tokenizer)
-    data.test_features = bert.run_classifier.convert_examples_to_features(data.test_InputExamples, data.label_list, MAX_SEQ_LENGTH, tokenizer)
+    data.train_features = arabert.run_classifier.convert_examples_to_features(data.train_InputExamples, data.label_list, MAX_SEQ_LENGTH, tokenizer)
+    data.test_features = arabert.run_classifier.convert_examples_to_features(data.test_InputExamples, data.label_list, MAX_SEQ_LENGTH, tokenizer)
 
 # %%
 import pickle

@@ -25,13 +25,18 @@ flags.DEFINE_bool(
     "True for AraBERTv1 and False for AraBERTv0.1")
 
 ## Other parameters
+flags.DEFINE_bool("use_farasapy", True,
+                    "True if you want to use farsasapy instead of FarasaSegmenterJar.jar")
+
 flags.DEFINE_string("path_to_farasa", None,
                     "path to the FarasaSegmenterJar.jar file required when "
-                    "do_farasa_tokenization is enabled")
+                    "do_farasa_tokenization is enabled will be ignore if use_farasapy is set to True")
+
+
 
 bt = BasicTokenizer()
-def clean_preprocess(text,do_farasa_tokenization,farasa):
-  text = " ".join(bt._run_split_on_punc(preprocess(text,do_farasa_tokenization=do_farasa_tokenization,farasa=farasa)))
+def clean_preprocess(text,do_farasa_tokenization,farasa,use_farasapy):
+  text = " ".join(bt._run_split_on_punc(preprocess(text,do_farasa_tokenization=do_farasa_tokenization,farasa=farasa,use_farasapy=use_farasapy)))
   text = " ".join(text.split())#removes extra whitespaces
   return text
 
@@ -43,10 +48,13 @@ def main(_):
     raise ValueError("do_farasa_tokenization is enabled, please provide the path_to_farasa")
   
   if FLAGS.do_farasa_tokenization:
-    from py4j.java_gateway import JavaGateway
-
-    gateway = JavaGateway.launch_gateway(classpath=FLAGS.path_to_farasa)
-    farasa = gateway.jvm.com.qcri.farasa.segmenter.Farasa()
+    if FLAGS.use_farasapy:
+      from farasa.segmenter import FarasaSegmenter
+      farasa_segmenter = FarasaSegmenter(interactive=True)
+    else:
+      from py4j.java_gateway import JavaGateway
+      gateway = JavaGateway.launch_gateway(classpath=FLAGS.path_to_farasa)
+      farasa_segmenter = gateway.jvm.com.qcri.farasa.segmenter.Farasa()
   else:
     farasa=None
 
@@ -57,14 +65,14 @@ def main(_):
     for paragraph in entry["paragraphs"]:
       paragraph["context"] = clean_preprocess(paragraph["context"],
                         do_farasa_tokenization=FLAGS.do_farasa_tokenization,
-                        farasa=farasa)
+                        farasa=farasa_segmenter, use_farasapy= FLAGS.use_farasapy)
       for qas in paragraph["qas"]:
         qas["question"]= clean_preprocess(qas["question"],
                             do_farasa_tokenization=FLAGS.do_farasa_tokenization,
-                            farasa=farasa)
+                            farasa=farasa_segmenter, use_farasapy= FLAGS.use_farasapy)
         qas["answers"][0]["text"] = clean_preprocess(qas["answers"][0]["text"],
                                   do_farasa_tokenization=FLAGS.do_farasa_tokenization,
-                                  farasa=farasa)
+                                  farasa=farasa_segmenter, use_farasapy= FLAGS.use_farasapy)
         qas["answers"][0]["answer_start"] = paragraph["context"].find(qas["answers"][0]["text"])
         if qas["answers"][0]["answer_start"] == -1:
           tf.logging.warning("Could not find answer for question '%d' : '%s' vs. '%s'",
