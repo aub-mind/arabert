@@ -80,10 +80,12 @@ arabert_tokenizer.tokenize(text)
 >>> ['ولن', 'ن', '##بالغ', 'إذا', 'قلنا', 'إن', 'هاتف', 'أو', 'كمبيوتر', 'المكتب', 'في', 'زمن', '##ن', '##ا', 'هذا', 'ضروري']
 ```
 
+**Examples**
+`araBERT_(Updated_Demo_TF).ipynb` is a demo using the AJGT dataset using TensorFlow Estimators (GPU and TPU compatible).
+`AraBERT_PyTorch_Demo.ipynb` is a demo using the AJGT dataset using HuggingFace's Transformers API for PyTorch (GPU compatible)
+`AraBERT_Text_Classification_with_HF_Trainer_Pytorch_GPU.ipynb` is a demo using the AJGT dataset using HuggingFace's Trainer API for PyTorch (GPU compatible) Note: TPU compatibility should be enabled in the `TrainingArguments` but not tested yet
+`MTL_AraBERT_Offensive_Lanaguage_detection.ipynb`  is the code used in the in the [OSACT4 - shared task on Offensive language detection (LREC 2020)](http://edinburghnlp.inf.ed.ac.uk/workshops/OSACT4/). Paper [Link](https://www.aclweb.org/anthology/2020.osact-1.16/)
 
-The ```araBERT_(Updated_Demo_TF).ipynb``` Notebook is a small demo using the AJGT dataset using TensorFlow (GPU and TPU compatible).
-
-**Coming Soon :** Fine-tunning demo using HuggingFace's Trainer API
 
 **AraBERT on ARCD**
 During the preprocessing step the ```answer_start``` character position needs to be recalculated. You can use the file ```arcd_preprocessing.py``` as shown below to clean, preprocess the ARCD dataset before running ```run_squad.py```. More detailed Colab notebook is available in the [SOQAL repo](https://github.com/husseinmozannar/SOQAL).
