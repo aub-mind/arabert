@@ -101,7 +101,7 @@ python arcd_preprocessing.py \
     --use_farasapy=True \
 ```
 ```bash
-python SOQAL/bert/run_squad.py \
+python run_squad.py \
   --vocab_file="/PATH_TO_PRETRAINED_TF_CKPT/vocab.txt" \
   --bert_config_file="/PATH_TO_PRETRAINED_TF_CKPT/config.json" \
   --init_checkpoint="/PATH_TO_PRETRAINED_TF_CKPT/" \
