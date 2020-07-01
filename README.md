@@ -9,6 +9,32 @@ The model was trained on ~70M sentences or ~23GB of Arabic text with ~3B words. 
 
 We evalaute both AraBERT models on different downstream tasks and compare it to [mBERT]((https://github.com/google-research/bert/blob/master/multilingual.md)), and other state of the art models (*To the extent of our knowledge*). The Tasks were Sentiment Analysis on 6 different datasets ([HARD](https://github.com/elnagara/HARD-Arabic-Dataset), [ASTD-Balanced](https://www.aclweb.org/anthology/D15-1299), [ArsenTD-Lev](https://staff.aub.edu.lb/~we07/Publications/ArSentD-LEV_Sentiment_Corpus.pdf), [LABR](https://github.com/mohamedadaly/LABR), [ArSaS](http://lrec-conf.org/workshops/lrec2018/W30/pdf/22_W30.pdf)), Named Entity Recognition with the [ANERcorp](http://curtis.ml.cmu.edu/w/courses/index.php/ANERcorp), and Arabic Question Answering on [Arabic-SQuAD and ARCD](https://github.com/husseinmozannar/SOQAL)
 
+**Update 3 (1/7/2020) :**
+You can now use the Transformers Library without adding the extra parameters to the `AutoTokenizer`, the tokens are now loaded automatically:
+```python
+#----NEW----
+from transformers import AutoTokenizer, AutoModel
+from farasa.segmenter import FarasaSegmenter
+from arabert.preprocess_arabert import preprocess
+
+arabert_tokenizer = AutoTokenizer.from_pretrained("aubmindlab/bert-base-arabert")
+arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabert")
+
+#----OLD----
+from transformers import AutoTokenizer, AutoModel
+from farasa.segmenter import FarasaSegmenter
+from arabert.preprocess_arabert import never_split_tokens, preprocess
+
+arabert_tokenizer = AutoTokenizer.from_pretrained(
+    "aubmindlab/bert-base-arabert",
+    do_lower_case=False,
+    do_basic_tokenize=True,
+    never_split=never_split_tokens)
+arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabert")
+
+
+
+```
 **Update 2 (21/5/2020) :**
 Added support for the farasapy segmenter https://github.com/MagedSaeed/farasapy in the ``preprocess_arabert.py`` which is ~6x faster than the ``py4j.java_gateway``, consider setting ``use_farasapy=True`` when calling preprocess and pass it an instance of ``FarasaSegmenter(interactive=True)`` with interactive set to ``True`` for faster segmentation.
 
@@ -31,19 +57,23 @@ ARCD|mBERT|EM:34.2 F1: 61.3|EM:51.14 F1:82.13|**EM:54.84 F1: 82.15**
 
 You can easily use AraBERT since it is almost fully compatible with existing codebases (Use this repo instead of the official BERT one, the only difference is in the ```tokenization.py``` file where we modify the _is_punctuation function to make it compatible with the "+" symbol and the "[" and "]" characters)
 
-To use HuggingFace's Transformer repository you only need to provide a list of token that forces the model to not split them, also make sure that the text is pre-segmented:
-**Not all libraries built on top of transformers support the `never_split` argument**
+
+**AraBERTv1 always needs pre-segmentation**
 ```python
 from transformers import AutoTokenizer, AutoModel
 from arabert.preprocess_arabert import never_split_tokens, preprocess
 from farasa.segmenter import FarasaSegmenter
 
-arabert_tokenizer = AutoTokenizer.from_pretrained(
-    "aubmindlab/bert-base-arabert",
-    do_lower_case=False,
-    do_basic_tokenize=True,
-    never_split=never_split_tokens)
+arabert_tokenizer = AutoTokenizer.from_pretrained("aubmindlab/bert-base-arabert")
 arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabert")
+
+# OLD WAY
+# arabert_tokenizer = AutoTokenizer.from_pretrained(
+#     "aubmindlab/bert-base-arabert",
+#     do_lower_case=False,
+#     do_basic_tokenize=True,
+#     never_split=never_split_tokens)
+# arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabert")
 
 #Preprocess the text to make it compatible with AraBERT using farasapy
 farasa_segmenter = FarasaSegmenter(interactive=True)
@@ -67,7 +97,7 @@ arabert_tokenizer.tokenize(text_preprocessed)
 >>> ['و+', 'لن', 'نبال', '##غ', 'إذا', 'قل', '+نا', 'إن', 'هاتف', 'أو', 'كمبيوتر', 'ال+', 'مكتب', 'في', 'زمن', '+نا', 'هذا', 'ضروري']
 ```
 
-**AraBERTv0.1 is compatible with all existing libraries, since it needs no pre-segmentation.**
+**AraBERTv0.1 needs no pre-segmentation.**
 ```python
 from transformers import AutoTokenizer, AutoModel
 
@@ -85,6 +115,10 @@ arabert_tokenizer.tokenize(text)
 `araBERT_(Updated_Demo_TF).ipynb` is a demo using the AJGT dataset using TensorFlow Estimators (GPU and TPU compatible).
 
 `AraBERT_PyTorch_Demo.ipynb` is a demo using the AJGT dataset using HuggingFace's Transformers API for PyTorch (GPU compatible)
+
+`AraBERT_with_fast_bert.ipynb` is a demo using the AJGT dataset with Fast-Bert library
+
+`AraBert_output_Embeddings_PyTorch.ipynb` is a demo on how to extract word embeddings fro sentences using the Transformers Library
 
 `AraBERT_Text_Classification_with_HF_Trainer_Pytorch_GPU.ipynb` is a demo using the AJGT dataset using HuggingFace's Trainer API for PyTorch (GPU compatible) Note: TPU compatibility should be enabled in the `TrainingArguments` but not tested yet
 
