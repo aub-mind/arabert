@@ -6,6 +6,8 @@
 
 `AraBERT_with_fast_bert.ipynb` is a demo using the AJGT dataset with Fast-Bert library
 
+`AraBERT_Fill_Mask.ipynb` is a demo of the Masked Language capabilites and how it is better than other models that support Arabic
+
 `AraBert_output_Embeddings_PyTorch.ipynb` is a demo on how to extract word embeddings fro sentences using the Transformers Library
 
 `AraBERT_Text_Classification_with_HF_Trainer_Pytorch_GPU.ipynb` is a demo using the AJGT dataset using HuggingFace's Trainer API for PyTorch (GPU compatible) Note: TPU compatibility should be enabled in the `TrainingArguments` but not tested yet
