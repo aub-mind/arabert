@@ -9,6 +9,9 @@ The model was trained on ~70M sentences or ~23GB of Arabic text with ~3B words. 
 
 We evalaute both AraBERT models on different downstream tasks and compare it to [mBERT]((https://github.com/google-research/bert/blob/master/multilingual.md)), and other state of the art models (*To the extent of our knowledge*). The Tasks were Sentiment Analysis on 6 different datasets ([HARD](https://github.com/elnagara/HARD-Arabic-Dataset), [ASTD-Balanced](https://www.aclweb.org/anthology/D15-1299), [ArsenTD-Lev](https://staff.aub.edu.lb/~we07/Publications/ArSentD-LEV_Sentiment_Corpus.pdf), [LABR](https://github.com/mohamedadaly/LABR), [ArSaS](http://lrec-conf.org/workshops/lrec2018/W30/pdf/22_W30.pdf)), Named Entity Recognition with the [ANERcorp](http://curtis.ml.cmu.edu/w/courses/index.php/ANERcorp), and Arabic Question Answering on [Arabic-SQuAD and ARCD](https://github.com/husseinmozannar/SOQAL)
 
+**Update 4 (7/7/2020) :**
+Added TF2 models under the `aubmindlab` models on `HuggingFace`, you can now use `TFAutoModel` and work with Tensorflow 2
+
 **Update 3 (1/7/2020) :**
 You can now use the Transformers Library without adding the extra parameters to the `AutoTokenizer`, the tokens are now loaded automatically:
 ```python
