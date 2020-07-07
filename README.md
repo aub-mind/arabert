@@ -17,15 +17,12 @@ You can now use the Transformers Library without adding the extra parameters to 
 ```python
 #----NEW----
 from transformers import AutoTokenizer, AutoModel
-from farasa.segmenter import FarasaSegmenter
 from arabert.preprocess_arabert import preprocess
 
 arabert_tokenizer = AutoTokenizer.from_pretrained("aubmindlab/bert-base-arabert")
-arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabert")
 
 #----OLD----
 from transformers import AutoTokenizer, AutoModel
-from farasa.segmenter import FarasaSegmenter
 from arabert.preprocess_arabert import never_split_tokens, preprocess
 
 arabert_tokenizer = AutoTokenizer.from_pretrained(
@@ -33,11 +30,8 @@ arabert_tokenizer = AutoTokenizer.from_pretrained(
     do_lower_case=False,
     do_basic_tokenize=True,
     never_split=never_split_tokens)
-arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabert")
-
-
-
 ```
+
 **Update 2 (21/5/2020) :**
 Added support for the farasapy segmenter https://github.com/MagedSaeed/farasapy in the ``preprocess_arabert.py`` which is ~6x faster than the ``py4j.java_gateway``, consider setting ``use_farasapy=True`` when calling preprocess and pass it an instance of ``FarasaSegmenter(interactive=True)`` with interactive set to ``True`` for faster segmentation.
 
