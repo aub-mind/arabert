@@ -26,10 +26,10 @@ made herein are solely the responsibility of the author[s].
 		understanding." arXiv preprint arXiv:1810.04805 (2018).
 	   - License and link : https://github.com/google-research/bert
     
-    +PyArabic
-        - T. Zerrouki‏, Pyarabic, An Arabic language library for Python,
-            https://pypi.python.org/pypi/pyarabic/, 2010
-        - License and link: https://github.com/linuxscout/pyarabic/
+	+PyArabic
+	   - T. Zerrouki, Pyarabic, An Arabic language library for Python,
+	        https://pypi.python.org/pypi/pyarabic/, 2010
+	   - License and link: https://github.com/linuxscout/pyarabic/
 
 * LICENSE
 
