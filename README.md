@@ -9,6 +9,9 @@ The model was trained on ~70M sentences or ~23GB of Arabic text with ~3B words. 
 
 We evalaute both AraBERT models on different downstream tasks and compare it to [mBERT]((https://github.com/google-research/bert/blob/master/multilingual.md)), and other state of the art models (*To the extent of our knowledge*). The Tasks were Sentiment Analysis on 6 different datasets ([HARD](https://github.com/elnagara/HARD-Arabic-Dataset), [ASTD-Balanced](https://www.aclweb.org/anthology/D15-1299), [ArsenTD-Lev](https://staff.aub.edu.lb/~we07/Publications/ArSentD-LEV_Sentiment_Corpus.pdf), [LABR](https://github.com/mohamedadaly/LABR), [ArSaS](http://lrec-conf.org/workshops/lrec2018/W30/pdf/22_W30.pdf)), Named Entity Recognition with the [ANERcorp](http://curtis.ml.cmu.edu/w/courses/index.php/ANERcorp), and Arabic Question Answering on [Arabic-SQuAD and ARCD](https://github.com/husseinmozannar/SOQAL)
 
+**Update 5 (2/9/2020):**
+Added [ANERcorp](https://link.springer.com/chapter/10.1007/978-3-540-70939-8_13) dataset for Arabic NER which we manually cleaned and split into sentences (since the original dataset was missing sentence seperators). We notice that the NER score improved (results table was updated). You can find th e splits (80/10/10) and code in the NER notebook under the `examples` folder.
+
 **Update 4 (7/7/2020) :**
 Added TF2 models under the `aubmindlab` models on `HuggingFace`, you can now use `TFAutoModel` and work with Tensorflow 2
 
@@ -37,16 +40,16 @@ Added support for the farasapy segmenter https://github.com/MagedSaeed/farasapy 
 
 **Update 1 (21/4/2020) :** 
 Fixed an issue with ARCD fine-tuning which drastically improved performance. Initially we didn't account for the change of the ```answer_start``` during preprocessing.
-## Results (Acc.)
-Task | prev. SOTA | mBERT | AraBERTv0.1 | AraBERTv1
----|:---:|:---:|:---:|:---:
-HARD |95.7 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)|95.7|**96.2**|96.1
-ASTD |86.5 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)| 80.1|92.2|**92.6**
-ArsenTD-Lev|52.4 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)|51|58.9|**59.4**
-AJGT|93 [Dahou et.al.](https://dl.acm.org/doi/fullHtml/10.1145/3314941)| 83.6|93.1|**93.8**
-LABR|**87.5** [Dahou et.al.](https://dl.acm.org/doi/fullHtml/10.1145/3314941)|83|85.9|86.7
-ANERcorp|81.7 (BiLSTM-CRF)|78.4|**84.2**|81.9
-ARCD|mBERT|EM:34.2 F1: 61.3|EM:51.14 F1:82.13|**EM:54.84 F1: 82.15**
+## Results
+Task | Metric |prev. SOTA | mBERT | AraBERTv0.1 | AraBERTv1
+---|:---:|:---:|:---:|:---:|:---:
+HARD |Acc.|95.7 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)|95.7|**96.2**|96.1
+ASTD |Acc.|86.5 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)| 80.1|92.2|**92.6**
+ArsenTD-Lev|Acc.|52.4 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)|51|58.9|**59.4**
+AJGT|Acc.|93 [Dahou et.al.](https://dl.acm.org/doi/fullHtml/10.1145/3314941)| 83.6|93.1|**93.8**
+LABR|Acc.|**87.5** [Dahou et.al.](https://dl.acm.org/doi/fullHtml/10.1145/3314941)|83|85.9|86.7
+ANERcorp|macro-F1|81.7 (BiLSTM-CRF)|78.4|**89.17**|88.67
+ARCD|EM - F1|mBERT|34.2 - 61.3|51.14 - 82.13|**54.84 - 82.15**
 
 *If you tested AraBERT on a public dataset and you want to add your results to the table above, open a pull request or contact us. Also make sure to have your code available online so we can add it as a reference*
 
@@ -109,6 +112,8 @@ arabert_tokenizer.tokenize(text)
 
 **Examples**
 
+`AraBERT_ANERCorp.ipynb` is a demo of AraBERT for token classification on the ANERCorp dataset. The notebook also contains the code to split the dataset into train/dev/test.
+
 `araBERT_(Updated_Demo_TF).ipynb` is a demo using the AJGT dataset using TensorFlow Estimators (GPU and TPU compatible).
 
 `AraBERT_PyTorch_Demo.ipynb` is a demo using the AJGT dataset using HuggingFace's Transformers API for PyTorch (GPU compatible)
@@ -161,7 +166,8 @@ PyTorch| [Drive_Link](https://drive.google.com/open?id=1-_3te42mQCPD8SxwZ3l-VBL7
 
 **You can find the PyTorch models in HuggingFace's Transformer Library under the ```aubmindlab``` username**
 
-## If you used this model please cite us as:
+## If you used this model please cite us as :
+Google Scholar has our Bibtex wrong (missing name), use this instead
 ```
 @inproceedings{antoun2020arabert,
   title={AraBERT: Transformer-based Model for Arabic Language Understanding},
