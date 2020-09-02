@@ -61,7 +61,7 @@ distribution of the software and/or database. Title to copyright in
 this software, database and any associated documentation shall at all
 times remain with the Owners and LICENSEE agrees to preserve same.
 
-The use of ArSenL should be cited as follows:
+The use of AraBERT should be cited as follows:
 @inproceedings{antoun2020arabert,
   title={AraBERT: Transformer-based Model for Arabic Language Understanding},
   author={Antoun, Wissam and Baly, Fady and Hajj, Hazem},
