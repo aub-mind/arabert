@@ -125,7 +125,7 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
-#vscode stuff  
+#vscode stuff
 .vscode/
 
 # Local History for Visual Studio Code
@@ -136,3 +136,5 @@ testing_squad.py
 FarasaSegmenterJar.jar
 data/
 testing/
+*.tsv
+*.zip

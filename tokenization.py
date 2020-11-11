@@ -192,9 +192,9 @@ class BasicTokenizer(object):
     def __init__(self, do_lower_case=True):
         """Constructs a BasicTokenizer.
 
-    Args:
-      do_lower_case: Whether to lower case the input.
-    """
+        Args:
+          do_lower_case: Whether to lower case the input.
+        """
         self.do_lower_case = do_lower_case
 
     def tokenize(self, text):
@@ -314,20 +314,20 @@ class WordpieceTokenizer(object):
     def tokenize(self, text):
         """Tokenizes a piece of text into its word pieces.
 
-    This uses a greedy longest-match-first algorithm to perform tokenization
-    using the given vocabulary.
+        This uses a greedy longest-match-first algorithm to perform tokenization
+        using the given vocabulary.
 
-    For example:
-      input = "unaffable"
-      output = ["un", "##aff", "##able"]
+        For example:
+          input = "unaffable"
+          output = ["un", "##aff", "##able"]
 
-    Args:
-      text: A single token or whitespace separated tokens. This should have
-        already been passed through `BasicTokenizer.
+        Args:
+          text: A single token or whitespace separated tokens. This should have
+            already been passed through `BasicTokenizer.
 
-    Returns:
-      A list of wordpiece tokens.
-    """
+        Returns:
+          A list of wordpiece tokens.
+        """
 
         text = convert_to_unicode(text)
 

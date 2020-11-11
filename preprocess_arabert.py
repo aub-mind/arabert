@@ -79,9 +79,9 @@ redundant_punct_pattern = (
 
 def remove_elongation(word):
     """
-	:param word:  the input word to remove elongation
-	:return: delongated word
-	"""
+    :param word:  the input word to remove elongation
+    :return: delongated word
+    """
     regex_tatweel = r"(\w)\1{2,}"
     # loop over the number of times the regex matched the word
     for index_ in range(len(re.findall(regex_tatweel, word))):
@@ -151,23 +151,23 @@ def remove_redundant_punct(text):
 
 def preprocess(text, do_farasa_tokenization=True, farasa=None, use_farasapy=False):
     """
-	Preprocess takes an input text line an applies the same preprocessing used in araBERT 
-				pretraining
-	
-	Note: a farasapy segmenter is ~6x faster than the py4j.java_gateway, consider setting use_farasapy=True
-	Farsa Segmentation will soon be fully migrated to farasapy, and support for the py4j.java_gateway.JavaObject will be removed
-	Args:
-		text (string): inout text string
-		farasa (JavaGateway): pass a "py4j.java_gateway.JavaObject" to the FarasaSegmenter.jar file 
-		farasa (FarasaSegmenter): pass a FarasaSegmenter instance from farasapy.segmenter
-		use_farasapy (boolean): set it to True when using a FarasaSegmenter instance from farasapy.segmenter
-	Example: 
-		from py4j.java_gateway import JavaGateway
-		gateway = JavaGateway.launch_gateway(classpath='./FarasaSegmenterJar.jar')
-		farasa = gateway.jvm.com.qcri.farasa.segmenter.Farasa()
-		processed_text = preprocess("Some_Text",do_farasa_tokenization=True , farasa=farasa)
+    Preprocess takes an input text line an applies the same preprocessing used in araBERT
+                            pretraining
 
-	"""
+    Note: a farasapy segmenter is ~6x faster than the py4j.java_gateway, consider setting use_farasapy=True
+    Farsa Segmentation will soon be fully migrated to farasapy, and support for the py4j.java_gateway.JavaObject will be removed
+    Args:
+            text (string): inout text string
+            farasa (JavaGateway): pass a "py4j.java_gateway.JavaObject" to the FarasaSegmenter.jar file
+            farasa (FarasaSegmenter): pass a FarasaSegmenter instance from farasapy.segmenter
+            use_farasapy (boolean): set it to True when using a FarasaSegmenter instance from farasapy.segmenter
+    Example:
+            from py4j.java_gateway import JavaGateway
+            gateway = JavaGateway.launch_gateway(classpath='./FarasaSegmenterJar.jar')
+            farasa = gateway.jvm.com.qcri.farasa.segmenter.Farasa()
+            processed_text = preprocess("Some_Text",do_farasa_tokenization=True , farasa=farasa)
+
+    """
     text = str(text)
     processing_tweet = araby.strip_tashkeel(text)
     processing_tweet = re.sub(r"\d+\/[ء-ي]+\/\d+\]", "", processing_tweet)
