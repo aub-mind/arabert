@@ -61,11 +61,6 @@ def clean_preprocess(text, do_farasa_tokenization, farasa, use_farasapy):
 def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
 
-    if FLAGS.do_farasa_tokenization and (FLAGS.path_to_farasa == None):
-        raise ValueError(
-            "do_farasa_tokenization is enabled, please provide the path_to_farasa"
-        )
-
     if FLAGS.do_farasa_tokenization:
         if FLAGS.use_farasapy:
             from farasa.segmenter import FarasaSegmenter
@@ -108,7 +103,7 @@ def main(_):
                 )
                 if qas["answers"][0]["answer_start"] == -1:
                     tf.logging.warning(
-                        "Could not find answer for question '%d' : '%s' vs. '%s'",
+                        "Could not find answer for question '%s' : '%s' vs. '%s'",
                         qas["id"],
                         paragraph["context"],
                         qas["answers"][0]["text"],
