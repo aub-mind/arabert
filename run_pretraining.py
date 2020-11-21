@@ -75,11 +75,18 @@ flags.DEFINE_integer("train_batch_size", 32, "Total batch size for training.")
 
 flags.DEFINE_integer("eval_batch_size", 8, "Total batch size for eval.")
 
+flags.DEFINE_float("poly_power", 1.0, "The power of poly decay.")
+
+flags.DEFINE_enum("optimizer", "lamb", ["adamw", "lamb"],
+                  "The optimizer for training.")
+
 flags.DEFINE_float("learning_rate", 5e-5, "The initial learning rate for Adam.")
 
 flags.DEFINE_integer("num_train_steps", 100000, "Number of training steps.")
 
 flags.DEFINE_integer("num_warmup_steps", 10000, "Number of warmup steps.")
+
+flags.DEFINE_integer("start_warmup_step", 0, "The starting step of warmup.")
 
 flags.DEFINE_integer(
     "save_checkpoints_steps", 1000, "How often to save the model checkpoint."
@@ -124,6 +131,9 @@ flags.DEFINE_integer(
     8,
     "Only used if `use_tpu` is True. Total number of TPU cores to use.",
 )
+
+flags.DEFINE_integer("keep_checkpoint_max", 10,
+                     "How many checkpoints to keep.")
 
 
 def model_fn_builder(
@@ -496,9 +506,9 @@ def main(_):
     for input_pattern in FLAGS.input_file.split(","):
         input_files.extend(tf.gfile.Glob(input_pattern))
 
-    tf.logging.info("*** Input Files ***")
-    for input_file in input_files:
-        tf.logging.info("  %s" % input_file)
+    # tf.logging.info("*** Input Files ***")
+    # for input_file in input_files:
+    #     tf.logging.info("  %s" % input_file)
 
     tpu_cluster_resolver = None
     if FLAGS.use_tpu and FLAGS.tpu_name:
@@ -512,6 +522,7 @@ def main(_):
         master=FLAGS.master,
         model_dir=FLAGS.output_dir,
         save_checkpoints_steps=FLAGS.save_checkpoints_steps,
+        keep_checkpoint_max=FLAGS.keep_checkpoint_max,
         tpu_config=tf.contrib.tpu.TPUConfig(
             iterations_per_loop=FLAGS.iterations_per_loop,
             num_shards=FLAGS.num_tpu_cores,
@@ -527,6 +538,9 @@ def main(_):
         num_warmup_steps=FLAGS.num_warmup_steps,
         use_tpu=FLAGS.use_tpu,
         use_one_hot_embeddings=FLAGS.use_tpu,
+        optimizer=FLAGS.optimizer,
+        poly_power=FLAGS.poly_power,
+        start_warmup_step=FLAGS.start_warmup_step
     )
 
     # If TPU is not available, this will fall back to normal Estimator on CPU
@@ -569,7 +583,6 @@ def main(_):
             for key in sorted(result.keys()):
                 tf.logging.info("  %s = %s", key, str(result[key]))
                 writer.write("%s = %s\n" % (key, str(result[key])))
-
 
 if __name__ == "__main__":
     flags.mark_flag_as_required("input_file")
