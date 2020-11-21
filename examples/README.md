@@ -1,6 +1,6 @@
 **Examples**
 
-`AraBERT-ANERCorp.ipynb` is a demo of AraBERT for token classification on the ANERCorp dataset. The notebook also contains the code to split the dataset into train/dev/test.
+`AraBERT_ANERCorp_CamelSplits.ipynb` is a demo of AraBERT for token classification on the ANERCorp dataset.
 
 `araBERT_(Updated_Demo_TF).ipynb` is a demo using the AJGT dataset using TensorFlow Estimators (GPU and TPU compatible).
 
