@@ -1,177 +1,176 @@
-# AraBERT : Pre-training BERT for Arabic Language Understanding
-<img src="https://github.com/aub-mind/arabert/blob/master/arabert_logo.png" width="100" align="left"/>
+# AraBERTv2 / AraGPT2 / AraELECTRA
 
-**AraBERT** is an Arabic pretrained lanaguage model based on [Google's BERT architechture](https://github.com/google-research/bert). AraBERT uses the same BERT-Base config. More details are available in the [AraBERT Paper](https://arxiv.org/abs/2003.00104v2) and in the [AraBERT Meetup](https://github.com/WissamAntoun/pydata_khobar_meetup)
+<img src="https://github.com/aub-mind/arabert/blob/master/arabert_logo.png" width="100" align="right"/>
 
-There are two versions of the model, AraBERTv0.1 and AraBERTv1, with the difference being that AraBERTv1 uses pre-segmented text where prefixes and suffixes were splitted using the [Farasa Segmenter](http://alt.qcri.org/farasa/segmenter.html).
+This repository now contains code and implementation for:
+- **AraBERT v0.1/v1**: Original
+- **AraBERT v0.2/v2**: Base and large versions with better vocabulary, more data, more training, [Read More..](#AraBERT)
+- **AraGPT2**: base, medium, large and MEGA. Trained from scratch on Arabic, [Read More..](#AraGPT2)
+- **AraELECTRA**: Trained from scratch on Arabic [Read More..](#AraELECTRA)
 
-The model was trained on ~70M sentences or ~23GB of Arabic text with ~3B words. The training corpora are a collection from publically available large scale raw arabic text ([Arabic Wikidumps](https://archive.org/details/arwiki-20190201), [The 1.5B words Arabic Corpus](https://www.semanticscholar.org/paper/1.5-billion-words-Arabic-Corpus-El-Khair/f3eeef4afb81223df96575adadf808fe7fe440b4), [The OSIAN Corpus](https://www.aclweb.org/anthology/W19-4619), Assafir news articles, and 4 other manually crawled news websites (Al-Akhbar, Annahar, AL-Ahram, AL-Wafd) from [the Wayback Machine](http://web.archive.org/))
-
-We evalaute both AraBERT models on different downstream tasks and compare them to [mBERT]((https://github.com/google-research/bert/blob/master/multilingual.md)), and other state of the art models (*To the extent of our knowledge*). The Tasks were Sentiment Analysis on 6 different datasets ([HARD](https://github.com/elnagara/HARD-Arabic-Dataset), [ASTD-Balanced](https://www.aclweb.org/anthology/D15-1299), [ArsenTD-Lev](https://staff.aub.edu.lb/~we07/Publications/ArSentD-LEV_Sentiment_Corpus.pdf), [LABR](https://github.com/mohamedadaly/LABR)), Named Entity Recognition with the [ANERcorp](http://curtis.ml.cmu.edu/w/courses/index.php/ANERcorp), and Arabic Question Answering on [Arabic-SQuAD and ARCD](https://github.com/husseinmozannar/SOQAL)
-
-**Update 6 (19/11/2020):**
-Added [ANERcorp](https://link.springer.com/chapter/10.1007/978-3-540-70939-8_13) with [CamelSplits](https://camel.abudhabi.nyu.edu/anercorp/) and updated the results table with the scores on the camel splits. You can also find our NER notebook under the `examples` folder.
-
-We also added the ability to use the `lamb` optimizer from the albert paper. Which is used when training with batch_sizes>~2K.
-
-**Update 5(2/9/2020):**
-~~Added [ANERcorp](https://link.springer.com/chapter/10.1007/978-3-540-70939-8_13) dataset for Arabic NER which we manually cleaned and split into sentences (since the original dataset was missing sentence seperators). We notice that the NER score improved (results table was updated). We added the code used to generate the splits (80/10/10) and an example notebook for Arabic NER under the `examples` folder.~~
-
-**Update 4 (7/7/2020) :**
-Added TF2 models under the `aubmindlab` models on `HuggingFace`, you can now use `TFAutoModel` and work with Tensorflow 2
-
-**Update 3 (1/7/2020) :**
-You can now use the Transformers Library without adding the extra parameters to the `AutoTokenizer`, the tokens are now loaded automatically:
-```python
-#----NEW----
-from transformers import AutoTokenizer, AutoModel
-from arabert.preprocess_arabert import preprocess
-
-arabert_tokenizer = AutoTokenizer.from_pretrained("aubmindlab/bert-base-arabert")
-
-#----OLD----
-from transformers import AutoTokenizer, AutoModel
-from arabert.preprocess_arabert import never_split_tokens, preprocess
-
-arabert_tokenizer = AutoTokenizer.from_pretrained(
-    "aubmindlab/bert-base-arabert",
-    do_lower_case=False,
-    do_basic_tokenize=True,
-    never_split=never_split_tokens)
+If you want to clone the old repository:
+```bash
+git clone https://github.com/aub-mind/arabert/
+cd arabert && git checkout 6a58ca118911ef311cbe8cdcdcc1d03601123291
 ```
+# AraBERTv2
 
-**Update 2 (21/5/2020) :**
-Added support for the farasapy segmenter https://github.com/MagedSaeed/farasapy in the ``preprocess_arabert.py`` which is ~6x faster than the ``py4j.java_gateway``, consider setting ``use_farasapy=True`` when calling preprocess and pass it an instance of ``FarasaSegmenter(interactive=True)`` with interactive set to ``True`` for faster segmentation.
+## What's New!
 
-**Update 1 (21/4/2020) :**
-Fixed an issue with ARCD fine-tuning ~~which drastically improved performance.~~ Initially we didn't account for the change of the ```answer_start``` during preprocessing. Results reverted to community submitted results [issue](https://github.com/aub-mind/arabert/issues/33)
-## Results
-Task | Metric |prev. SOTA | mBERT | AraBERTv0.1 | AraBERTv1
----|:---:|:---:|:---:|:---:|:---:
-HARD |Acc.|95.7 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)|95.7|**96.2**|96.1
-ASTD |Acc.|86.5 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)| 80.1|92.2|**92.6**
-ArsenTD-Lev|Acc.|52.4 [ElJundi et.al.](https://www.aclweb.org/anthology/W19-4608/)|51|58.9|**59.4**
-AJGT|Acc.|93 [Dahou et.al.](https://dl.acm.org/doi/fullHtml/10.1145/3314941)| 83.6|93.1|**93.8**
-LABR|Acc.|**87.5** [Dahou et.al.](https://dl.acm.org/doi/fullHtml/10.1145/3314941)|83|85.9|86.7
-ANERcorp|macro-F1|81.7 (BiLSTM-CRF)|78.4|**83.1**|82.4
-ARCD|EM - F1|mBERT|**34.2** - 61.3|31.6- 67.4|31.7 - **67.8**
+AraBERT now comes in 4 new variants to replace the old v1 versions:
 
-*If you tested AraBERT on a public dataset and you want to add your results to the table above, open a pull request or contact us. Also make sure to have your code available online so we can add it as a reference*
+More Detail in the AraBERT folder and in the [README](https://github.com/aub-mind/arabert/blob/master/arabert/README.md) and in the [AraBERT Paper](https://arxiv.org/abs/2003.00104v2)
 
-## How to use
+ Model | HuggingFace Model Name | Size (MB/Params)| Pre-Segmentation | DataSet (Sentences/Size/nWords) |
+ ---|:---:|:---:|:---:|:---:
+AraBERTv0.2-base | [bert-base-arabertv02](https://huggingface.co/aubmindlab/bert-base-arabertv02) | 543MB / 136M | No | 200M / 77GB / 8.6B |
+ AraBERTv0.2-large| [bert-large-arabertv02](https://huggingface.co/aubmindlab/bert-large-arabertv02) | 1.38G / 371M | No | 200M / 77GB / 8.6B |
+AraBERTv2-base| [bert-base-arabertv2](https://huggingface.co/aubmindlab/bert-base-arabertv2) | 543MB / 136M | Yes | 200M / 77GB / 8.6B |
+AraBERTv2-large| [bert-large-arabertv2](https://huggingface.co/aubmindlab/bert-large-arabertv2) | 1.38G / 371M | Yes | 200M / 77GB / 8.6B |
+ AraBERTv0.1-base| [bert-base-arabertv01](https://huggingface.co/aubmindlab/bert-base-arabertv01) | 543MB / 136M | No | 77M / 23GB / 2.7B |
+AraBERTv1-base| [bert-base-arabert](https://huggingface.co/aubmindlab/bert-base-arabert) | 543MB / 136M | Yes | 77M / 23GB / 2.7B |
 
-You can easily use AraBERT since it is almost fully compatible with existing codebases (Use this repo instead of the official BERT one, the only difference is in the ```tokenization.py``` file where we modify the _is_punctuation function to make it compatible with the "+" symbol and the "[" and "]" characters)
+All models are available in the `HuggingFace` model page under the [aubmindlab](https://huggingface.co/aubmindlab/) name. Checkpoints are available in PyTorch, TF2 and TF1 formats.
 
+## Better Pre-Processing and New Vocab
 
-**AraBERTv1 always needs pre-segmentation**
+We identified an issue with AraBERTv1's wordpiece vocabulary. The issue came from punctuations and numbers that were still attached to words when learned the wordpiece vocab. We now insert a space between numbers and characters and around punctuation characters.
+
+The new vocabulary was learnt using the `BertWordpieceTokenizer` from the `tokenizers` library, and should now support the Fast tokenizer implementation from the `transformers` library.
+
+**P.S.**: All the old BERT codes should work with the new BERT, just change the model name and check the new preprocessing function
+
+**Please read the section on how to use the [preprocessing function](#Preprocessing)**
+
+## Bigger Dataset and More Compute
+
+We used ~3.5 times more data, and trained for longer.
+For Dataset Sources see the [Dataset Section](#Dataset)
+
+Model | Hardware | num of examples with seq len (128 / 512) |128 (Batch Size/ Num of Steps) | 512 (Batch Size/ Num of Steps) | Total Steps | Total Time (in Days) |
+ ---|:---:|:---:|:---:|:---:|:---:|:---:
+AraBERTv0.2-base | TPUv3-8 | 420M / 207M | 2560 / 1M | 384/ 2M | 3M | 36
+AraBERTv0.2-large | TPUv3-128 | 420M / 207M | 13440 / 250K | 2056 / 300K | 550K | 7
+AraBERTv2-base | TPUv3-8 | 420M / 207M | 2560 / 1M | 384/ 2M | 3M | 36
+AraBERTv2-large | TPUv3-128 | 520M / 245M | 13440 / 250K | 2056 / 300K | 550K | 7
+AraBERT-base (v1/v0.1) | TPUv2-8 | - |512 / 900K | 128 / 300K| 1.2M | 4
+
+# AraGPT2
+
+More details and code are available in the AraGPT2 folder and [README](https://github.com/aub-mind/arabert/blob/master/aragpt2/README.md)
+
+## Model
+
+ Model | HuggingFace Model Name | Size / Params|
+ ---|:---:|:---:
+ AraGPT2-base | [aragpt2-base](https://huggingface.co/aubmindlab/aragpt2-base) | 527MB/135M |
+ AraGPT2-medium | [aragpt2-medium](https://huggingface.co/aubmindlab/aragpt2-medium) |  1.38G/370M  |
+ AraGPT2-large | [aragpt2-large](https://huggingface.co/aubmindlab/aragpt2-large) |  2.98GB/792M  |
+ AraGPT2-mega | [aragpt2-mega](https://huggingface.co/aubmindlab/aragpt2-mega) |  5.5GB/1.46B  |
+
+All models are available in the `HuggingFace` model page under the [aubmindlab](https://huggingface.co/aubmindlab/) name. Checkpoints are available in PyTorch, TF2 and TF1 formats.
+
+## Dataset and Compute
+
+For Dataset Source see the [Dataset Section](#Dataset)
+
+Model | Hardware | num of examples (seq len = 1024) | Batch Size | Num of Steps | Time (in days)
+ ---|:---:|:---:|:---:|:---:|:---:
+AraGPT2-base | TPUv3-128 | 9.7M | 1792 | 125K | 1.5
+AraGPT2-medium | TPUv3-128 | 9.7M | 1152 | 85K | 1.5
+AraGPT2-large | TPUv3-128 | 9.7M | 256 | 220k | 3
+AraGPT2-mega | TPUv3-128 | 9.7M | 256 | 800K | 9
+
+# AraELECTRA
+
+More details and code are available in the AraELECTRA folder and [README](https://github.com/aub-mind/arabert/blob/master/araelectra/README.md)
+
+## Model
+
+Model | HuggingFace Model Name | Size (MB/Params)|
+ ---|:---:|:---:
+AraELECTRA-base-generator | [electra-base-generator](https://huggingface.co/aubmindlab/electra-base-generator) |  227MB/60M  |
+AraELECTRA-base-discriminator | [electra-base-discriminator](https://huggingface.co/aubmindlab/electra-base-discriminator) |  516MB/135M  |
+
+## Dataset and Compute
+Model | Hardware | num of examples (seq len = 512) | Batch Size | Num of Steps | Time (in days)
+ ---|:---:|:---:|:---:|:---:|:---:
+ELECTRA-base | TPUv3-8 | - | 256 | 2M | 24
+
+# Dataset
+
+The pretraining data used for the new AraBERT model is also used for **AraGPT2 and AraELECTRA**.
+
+The dataset consists of 77GB or 200,095,961 lines or 8,655,948,860 words or 82,232,988,358 chars (before applying Farasa Segmentation)
+
+For the new dataset we added the unshuffled OSCAR corpus, after we thoroughly filter it, to the previous dataset used in AraBERTv1 but with out the websites that we previously crawled:
+- OSCAR unshuffled and filtered.
+- [Arabic Wikipedia dump](https://archive.org/details/arwiki-20190201) from 2020/09/01
+- [The 1.5B words Arabic Corpus](https://www.semanticscholar.org/paper/1.5-billion-words-Arabic-Corpus-El-Khair/f3eeef4afb81223df96575adadf808fe7fe440b4)
+- [The OSIAN Corpus](https://www.aclweb.org/anthology/W19-4619)
+- Assafir news articles. Huge thank you for Assafir for giving us the data
+
+# Preprocessing
+
+It is recommended to apply our preprocessing function before training/testing on any dataset.
+**Install farasapy to segment text for AraBERT v1 & v2 `pip install farasapy`**
+
 ```python
-from transformers import AutoTokenizer, AutoModel
-from arabert.preprocess_arabert import never_split_tokens, preprocess
-from farasa.segmenter import FarasaSegmenter
+from arabert.preprocess import ArabertPreprocessor
 
-arabert_tokenizer = AutoTokenizer.from_pretrained("aubmindlab/bert-base-arabert")
-arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabert")
-
-# OLD WAY
-# arabert_tokenizer = AutoTokenizer.from_pretrained(
-#     "aubmindlab/bert-base-arabert",
-#     do_lower_case=False,
-#     do_basic_tokenize=True,
-#     never_split=never_split_tokens)
-# arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabert")
-
-#Preprocess the text to make it compatible with AraBERT using farasapy
-farasa_segmenter = FarasaSegmenter(interactive=True)
-
-#or you can use a py4j JavaGateway to the farasa Segmneter .jar but it's slower
-#(see update 2)
-#from py4j.java_gateway import JavaGateway
-#gateway = JavaGateway.launch_gateway(classpath='./PATH_TO_FARASA/FarasaSegmenterJar.jar')
-#farasa = gateway.jvm.com.qcri.farasa.segmenter.Farasa()
+model_name = "bert-base-arabertv2"
+arabert_prep = ArabertPreprocessor(model_name=model_name, keep_emojis=False)
 
 text = "ولن نبالغ إذا قلنا إن هاتف أو كمبيوتر المكتب في زمننا هذا ضروري"
-text_preprocessed = preprocess( text,
-                                do_farasa_tokenization = True,
-                                farasa = farasa_segmenter,
-                                use_farasapy = True)
-
->>>text_preprocessed: "و+ لن نبالغ إذا قل +نا إن هاتف أو كمبيوتر ال+ مكتب في زمن +نا هذا ضروري"
-
-arabert_tokenizer.tokenize(text_preprocessed)
-
->>> ['و+', 'لن', 'نبال', '##غ', 'إذا', 'قل', '+نا', 'إن', 'هاتف', 'أو', 'كمبيوتر', 'ال+', 'مكتب', 'في', 'زمن', '+نا', 'هذا', 'ضروري']
+arabert_prep.preprocess(text)
+>>>"و+ لن نبالغ إذا قل +نا إن هاتف أو كمبيوتر ال+ مكتب في زمن +نا هذا ضروري"
 ```
 
-**AraBERTv0.1 needs no pre-segmentation.**
-```python
-from transformers import AutoTokenizer, AutoModel
-
-arabert_tokenizer = AutoTokenizer.from_pretrained("aubmindlab/bert-base-arabertv01",do_lower_case=False)
-arabert_model = AutoModel.from_pretrained("aubmindlab/bert-base-arabertv01")
-
-text = "ولن نبالغ إذا قلنا إن هاتف أو كمبيوتر المكتب في زمننا هذا ضروري"
-arabert_tokenizer.tokenize(text)
-
->>> ['ولن', 'ن', '##بالغ', 'إذا', 'قلنا', 'إن', 'هاتف', 'أو', 'كمبيوتر', 'المكتب', 'في', 'زمن', '##ن', '##ا', 'هذا', 'ضروري']
+## Accepted_models
 ```
+bert-base-arabertv01
+bert-base-arabert
+bert-base-arabertv02
+bert-base-arabertv2
+bert-large-arabertv02
+bert-large-arabertv2
+araelectra-base
+aragpt2-base
+aragpt2-medium
+aragpt2-large
+aragpt2-mega
+```
+# Examples Notebooks
 
-**Examples**
+the `examples` folder contains notebook that shows how to use AraBERT.
+**Please note that the examples still use the old repository, We will update them in time**
 
-`AraBERT_ANERCorp_CamelSplits.ipynb` is a demo of AraBERT for token classification on the ANERCorp dataset.
+- `AraBERT_ANERCorp_CamelSplits.ipynb` is a demo of AraBERT for token classification on the ANERCorp dataset.
 
-`araBERT_(Updated_Demo_TF).ipynb` is a demo using the AJGT dataset using TensorFlow Estimators (GPU and TPU compatible).
+- `araBERT_(Updated_Demo_TF).ipynb` is a demo using the AJGT dataset using TensorFlow Estimators (GPU and TPU compatible).
 
-`AraBERT_PyTorch_Demo.ipynb` is a demo using the AJGT dataset using HuggingFace's Transformers API for PyTorch (GPU compatible)
+- `AraBERT_with_fast_bert.ipynb` is a demo using the AJGT dataset with Fast-Bert library
 
-`AraBERT_with_fast_bert.ipynb` is a demo using the AJGT dataset with Fast-Bert library
+- `AraBERT_Fill_Mask.ipynb` is a demo of the Masked Language capabilites and how it is better than other models that support Arabic
 
-`AraBERT_Fill_Mask.ipynb` is a demo of the Masked Language capabilites and how it is better than other models that support Arabic
+- `AraBert_output_Embeddings_PyTorch.ipynb` is a demo on how to extract word embeddings fro sentences using the Transformers Library
 
-`AraBert_output_Embeddings_PyTorch.ipynb` is a demo on how to extract word embeddings fro sentences using the Transformers Library
+- `AraBERT_Text_Classification_with_HF_Trainer_Pytorch_GPU.ipynb` is a demo using the AJGT dataset using HuggingFace's Trainer API for PyTorch (GPU compatible) Note: TPU compatibility should be enabled in the `TrainingArguments` but not tested yet
 
-`AraBERT_Text_Classification_with_HF_Trainer_Pytorch_GPU.ipynb` is a demo using the AJGT dataset using HuggingFace's Trainer API for PyTorch (GPU compatible) Note: TPU compatibility should be enabled in the `TrainingArguments` but not tested yet
+- `MTL_AraBERT_Offensive_Lanaguage_detection.ipynb`  is the code used in the in the [OSACT4 - shared task on Offensive language detection (LREC 2020)](http://edinburghnlp.inf.ed.ac.uk/workshops/OSACT4/). Paper [Link](https://www.aclweb.org/anthology/2020.osact-1.16/)
 
-`MTL_AraBERT_Offensive_Lanaguage_detection.ipynb`  is the code used in the in the [OSACT4 - shared task on Offensive language detection (LREC 2020)](http://edinburghnlp.inf.ed.ac.uk/workshops/OSACT4/). Paper [Link](https://www.aclweb.org/anthology/2020.osact-1.16/)
+# TensorFlow 1.x models
 
-**AraBERT on ARCD**
-
-During the preprocessing step the ```answer_start``` character position needs to be recalculated. You can use the file ```arcd_preprocessing.py``` as shown below to clean, preprocess the ARCD dataset before running ```run_squad.py```. More detailed Colab notebook is available in the [SOQAL repo](https://github.com/husseinmozannar/SOQAL).
+The TF1.x model are avaiable in the HuggingFace models repo.
+To download them as follows:
 ```bash
-python arcd_preprocessing.py \
-    --input_file="/PATH_TO/arcd-test.json" \
-    --output_file="arcd-test-pre.json" \
-    --do_farasa_tokenization=True \
-    --use_farasapy=True \
+wget https://s3.amazonaws.com/models.huggingface.co/bert/aubmindlab/MODEL_NAME/tf1_model.tar.gz
 ```
-```bash
-python run_squad.py \
-  --vocab_file="/PATH_TO_PRETRAINED_TF_CKPT/vocab.txt" \
-  --bert_config_file="/PATH_TO_PRETRAINED_TF_CKPT/config.json" \
-  --init_checkpoint="/PATH_TO_PRETRAINED_TF_CKPT/" \
-  --do_train=True \
-  --train_file=turk_combined_all_pre.json \
-  --do_predict=True \
-  --predict_file=arcd-test-pre.json \
-  --train_batch_size=32 \
-  --predict_batch_size=24 \
-  --learning_rate=3e-5 \
-  --num_train_epochs=4 \
-  --max_seq_length=384 \
-  --doc_stride=128 \
-  --do_lower_case=False\
-  --output_dir="/PATH_TO/OUTPUT_PATH"/ \
-  --use_tpu=True \
-  --tpu_name=$TPU_ADDRESS \
-```
-## Model Weights and Vocab Download
-Models | AraBERTv0.1 | AraBERTv1
----|:---:|:---:
-TensorFlow|[Drive Link](https://drive.google.com/open?id=1-kVmTUZZ4DP2rzeHNjTPkY8OjnQCpomO) | [Drive Link](https://drive.google.com/open?id=1-d7-9ljKgDJP5mx73uBtio-TuUZCqZnt)
-PyTorch| [Drive_Link](https://drive.google.com/open?id=1-_3te42mQCPD8SxwZ3l-VBL7yaJH-IOv)| [Drive_Link](https://drive.google.com/open?id=1-69s6Pxqbi63HOQ1M9wTcr-Ovc6PWLLo)
+where `MODEL_NAME` is any model under the `aubmindlab` name
 
-**You can find the PyTorch models in HuggingFace's Transformer Library under the ```aubmindlab``` username**
 
-## If you used this model please cite us as :
+# If you used this model please cite us as :
+## AraBERT
 Google Scholar has our Bibtex wrong (missing name), use this instead
 ```
 @inproceedings{antoun2020arabert,
@@ -181,11 +180,38 @@ Google Scholar has our Bibtex wrong (missing name), use this instead
   pages={9}
 }
 ```
-## Acknowledgments
+## AraGPT2
+```
+@misc{antoun2020aragpt2,
+      title={AraGPT2: Pre-Trained Transformer for Arabic Language Generation},
+      author={Wissam Antoun and Fady Baly and Hazem Hajj},
+      year={2020},
+      eprint={2012.15520},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+```
+
+## AraELECTRA
+```
+@misc{antoun2020araelectra,
+      title={AraELECTRA: Pre-Training Text Discriminators for Arabic Language Understanding},
+      author={Wissam Antoun and Fady Baly and Hazem Hajj},
+      year={2020},
+      eprint={2012.15516},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
+```
+
+
+# Acknowledgments
 Thanks to TensorFlow Research Cloud (TFRC) for the free access to Cloud TPUs, couldn't have done it without this program, and to the [AUB MIND Lab](https://sites.aub.edu.lb/mindlab/) Members for the continous support. Also thanks to [Yakshof](https://www.yakshof.com/#/) and Assafir for data and storage access. Another thanks for Habib Rahal (https://www.behance.net/rahalhabib), for putting a face to AraBERT.
 
-## Contacts
-**Wissam Antoun**: [Linkedin](https://www.linkedin.com/in/giulio-ravasio-3a81a9110/) | [Twitter](https://twitter.com/wissam_antoun) | [Github](https://github.com/WissamAntoun) | <wfa07@mail.aub.edu> | <wissam.antoun@gmail.com>
+# Contacts
+**Wissam Antoun**: [Linkedin](https://www.linkedin.com/in/wissam-antoun-622142b4/) | [Twitter](https://twitter.com/wissam_antoun) | [Github](https://github.com/WissamAntoun) | <wfa07@mail.aub.edu> | <wissam.antoun@gmail.com>
 
 **Fady Baly**: [Linkedin](https://www.linkedin.com/in/fadybaly/) | [Twitter](https://twitter.com/fadybaly) | [Github](https://github.com/fadybaly) | <fgb06@mail.aub.edu> | <baly.fady@gmail.com>
+
+
 

@@ -1,0 +1,6 @@
+data/
+.vscode/
+__pycache__/
+scratch.py
+*.sh
+*.bat

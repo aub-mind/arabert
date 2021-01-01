@@ -853,6 +853,8 @@ def convert_examples_to_features(examples, label_list, max_seq_length, tokenizer
 
 def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
+    logger = tf.get_logger()
+    logger.propagate = False
 
     processors = {
         "cola": ColaProcessor,

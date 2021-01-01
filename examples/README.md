@@ -4,8 +4,6 @@
 
 `araBERT_(Updated_Demo_TF).ipynb` is a demo using the AJGT dataset using TensorFlow Estimators (GPU and TPU compatible).
 
-`AraBERT_PyTorch_Demo.ipynb` is a demo using the AJGT dataset using HuggingFace's Transformers API for PyTorch (GPU compatible)
-
 `AraBERT_with_fast_bert.ipynb` is a demo using the AJGT dataset with Fast-Bert library
 
 `AraBERT_Fill_Mask.ipynb` is a demo of the Masked Language capabilites and how it is better than other models that support Arabic

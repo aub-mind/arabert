@@ -4,8 +4,12 @@
 # any SQUAD-like structured files and "naively" re-alligns the answers start positions
 
 import tensorflow as tf
-from arabert.preprocess_arabert import preprocess, never_split_tokens
-from arabert.tokenization import BasicTokenizer
+import sys
+sys.path.append('..')
+from arabert.preprocess import ArabertPreprocessor
+from tokenization import BasicTokenizer
+
+
 
 import json
 
@@ -22,35 +26,19 @@ flags.DEFINE_string(
 )
 
 flags.DEFINE_bool(
-    "do_farasa_tokenization", None, "True for AraBERTv1 and False for AraBERTv0.1"
+    "model_name", None, "Check the accepted models list"
 )
 
-## Other parameters
-flags.DEFINE_bool(
-    "use_farasapy",
-    True,
-    "True if you want to use farsasapy instead of FarasaSegmenterJar.jar",
-)
-
-flags.DEFINE_string(
-    "path_to_farasa",
-    None,
-    "path to the FarasaSegmenterJar.jar file required when "
-    "do_farasa_tokenization is enabled will be ignore if use_farasapy is set to True",
-)
 
 
 bt = BasicTokenizer()
 
 
-def clean_preprocess(text, do_farasa_tokenization, farasa, use_farasapy):
+def clean_preprocess(text, arabert_prep):
     text = " ".join(
         bt._run_split_on_punc(
-            preprocess(
-                text,
-                do_farasa_tokenization=do_farasa_tokenization,
-                farasa=farasa,
-                use_farasapy=use_farasapy,
+            arabert_prep.preprocess(
+                text
             )
         )
     )
@@ -60,19 +48,10 @@ def clean_preprocess(text, do_farasa_tokenization, farasa, use_farasapy):
 
 def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
+    logger = tf.get_logger()
+    logger.propagate = False
 
-    if FLAGS.do_farasa_tokenization:
-        if FLAGS.use_farasapy:
-            from farasa.segmenter import FarasaSegmenter
-
-            farasa_segmenter = FarasaSegmenter(interactive=True)
-        else:
-            from py4j.java_gateway import JavaGateway
-
-            gateway = JavaGateway.launch_gateway(classpath=FLAGS.path_to_farasa)
-            farasa_segmenter = gateway.jvm.com.qcri.farasa.segmenter.Farasa()
-    else:
-        farasa = None
+    arabert_prep = ArabertPreprocessor(model_name=FLAGS.model_name, keep_emojis=False)
 
     with tf.gfile.Open(FLAGS.input_file, "r") as reader:
         input_data = json.load(reader)["data"]
@@ -81,22 +60,16 @@ def main(_):
         for paragraph in entry["paragraphs"]:
             paragraph["context"] = clean_preprocess(
                 paragraph["context"],
-                do_farasa_tokenization=FLAGS.do_farasa_tokenization,
-                farasa=farasa_segmenter,
-                use_farasapy=FLAGS.use_farasapy,
+                arabert_prep
             )
             for qas in paragraph["qas"]:
                 qas["question"] = clean_preprocess(
                     qas["question"],
-                    do_farasa_tokenization=FLAGS.do_farasa_tokenization,
-                    farasa=farasa_segmenter,
-                    use_farasapy=FLAGS.use_farasapy,
+                    arabert_prep
                 )
                 qas["answers"][0]["text"] = clean_preprocess(
                     qas["answers"][0]["text"],
-                    do_farasa_tokenization=FLAGS.do_farasa_tokenization,
-                    farasa=farasa_segmenter,
-                    use_farasapy=FLAGS.use_farasapy,
+                    arabert_prep
                 )
                 qas["answers"][0]["answer_start"] = paragraph["context"].find(
                     qas["answers"][0]["text"]
@@ -121,5 +94,5 @@ def main(_):
 if __name__ == "__main__":
     flags.mark_flag_as_required("input_file")
     flags.mark_flag_as_required("output_file")
-    flags.mark_flag_as_required("do_farasa_tokenization")
+    flags.mark_flag_as_required("model_name")
     tf.app.run()

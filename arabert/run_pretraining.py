@@ -494,6 +494,8 @@ def _decode_record(record, name_to_features):
 
 def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
+    logger = tf.get_logger()
+    logger.propagate = False
 
     if not FLAGS.do_train and not FLAGS.do_eval:
         raise ValueError("At least one of `do_train` or `do_eval` must be True.")
