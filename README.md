@@ -89,8 +89,8 @@ More details and code are available in the AraELECTRA folder and [README](https:
 
 Model | HuggingFace Model Name | Size (MB/Params)|
  ---|:---:|:---:
-AraELECTRA-base-generator | [electra-base-generator](https://huggingface.co/aubmindlab/electra-base-generator) |  227MB/60M  |
-AraELECTRA-base-discriminator | [electra-base-discriminator](https://huggingface.co/aubmindlab/electra-base-discriminator) |  516MB/135M  |
+AraELECTRA-base-generator | [araelectra-base-generator](https://huggingface.co/aubmindlab/araelectra-base-generator) |  227MB/60M  |
+AraELECTRA-base-discriminator | [araelectra-base-discriminator](https://huggingface.co/aubmindlab/araelectra-base-discriminator) |  516MB/135M  |
 
 ## Dataset and Compute
 Model | Hardware | num of examples (seq len = 512) | Batch Size | Num of Steps | Time (in days)

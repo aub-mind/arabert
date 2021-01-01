@@ -15,8 +15,8 @@ We are releasing two pre-trained models:
 
 | Model | Layers | Hidden Size | Attention Heads | Params | HuggingFace Model Name |
 | --- | --- | --- | --- | ---  | --- |
-| AraELECTRA-base-discriminator | 12 | 12 | 768 | 136M | [electra-base-discriminator](https://huggingface.co/aubmindlab/electra-base-discriminator) |
-| AraELECTRA-base-generator | 12 |4 | 256 | 60M | [electra-base-generator](https://huggingface.co/aubmindlab/electra-base-generator)
+| AraELECTRA-base-discriminator | 12 | 12 | 768 | 136M | [araelectra-base-discriminator](https://huggingface.co/aubmindlab/araelectra-base-discriminator) |
+| AraELECTRA-base-generator | 12 |4 | 256 | 60M | [araelectra-base-generator](https://huggingface.co/aubmindlab/araelectra-base-generator)
 
 ## Results
 
