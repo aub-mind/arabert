@@ -19,7 +19,7 @@ cd arabert && git checkout 6a58ca118911ef311cbe8cdcdcc1d03601123291
 
 AraBERT now comes in 4 new variants to replace the old v1 versions:
 
-More Detail in the AraBERT folder and in the [README](https://github.com/aub-mind/arabert/blob/master/arabert/README.md) and in the [AraBERT Paper](https://arxiv.org/abs/2003.00104v2)
+More Detail in the AraBERT folder and in the [README](https://github.com/aub-mind/arabert/tree/master/arabert) and in the [AraBERT Paper](https://arxiv.org/abs/2003.00104)
 
  Model | HuggingFace Model Name | Size (MB/Params)| Pre-Segmentation | DataSet (Sentences/Size/nWords) |
  ---|:---:|:---:|:---:|:---:
