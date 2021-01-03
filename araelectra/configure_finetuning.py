@@ -38,7 +38,7 @@ class FinetuningConfig(object):
     self.keep_all_models = True  # if False, only keep the last trial's ckpt
 
     # model
-    self.model_size = "small"  # one of "small", "base", or "large"
+    self.model_size = "base"  # one of "small", "base", or "large"
     self.task_names = ["chunk"]  # which tasks to learn
     # override the default transformer hparams for the provided model size; see
     # modeling.BertConfig for the possible hparams and util.training_utils for
@@ -47,7 +47,7 @@ class FinetuningConfig(object):
         kwargs["model_hparam_overrides"]
         if "model_hparam_overrides" in kwargs else {})
     self.embedding_size = None  # bert hidden size by default
-    self.vocab_size = 30522  # number of tokens in the vocabulary
+    self.vocab_size = 64000  # number of tokens in the vocabulary
     self.do_lower_case = True
 
     # training
