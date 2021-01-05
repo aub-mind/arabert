@@ -29,22 +29,22 @@ from arabert.preprocess import ArabertPreprocessor
 MODEL_NAME='aragpt2-base'
 arabert_prep = ArabertPreprocessor(model_name=MODEL_NAME, keep_emojis=True)
 
-text=""
-text_clean = arabert_prep.preprocess(text)
-
 model = GPT2LMHeadModel.from_pretrained(MODEL_NAME)
 tokenizer = GPT2TokenizerFast.from_pretrained(MODEL_NAME)
 generation_pipeline = pipeline("text-generation",model=model,tokenizer=tokenizer)
 
+text=""
+text_clean = arabert_prep.preprocess(text)
+
 #feel free to try different decoding settings
-generation_pipeline(text,
+generation_pipeline(
+    text_clean,
     pad_token_id=tokenizer.eos_token_id,
     num_beams=10,
     max_length=200,
     top_p=0.9,
     repetition_penalty = 3.0,
     no_repeat_ngram_size = 3)[0]['generated_text']
->>>
 ```
 ## Finetunning using `transformers`:
 

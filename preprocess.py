@@ -58,7 +58,7 @@ class ArabertPreprocessor:
         arabert_prep.preprocess("SOME ARABIC TEXT")
     """
 
-    def __init__(self, model_name, keep_emojis=False):
+    def __init__(self, model_name, keep_emojis=False, remove_html_markup=True, replace_urls_emails_mentions=True):
         """
         model_name (:obj:`str`): model name from the HuggingFace Models page without the aubmindlab tag. Current accepted models are:
 
@@ -75,7 +75,12 @@ class ArabertPreprocessor:
             - :obj:`"aragpt2-mega"`: No farasa segmentation.
 
         keep_emojis(:obj: `bool`): don't remove emojis while preprocessing. Defaults to False
+
+        remove_html_markup(:obj: `bool`): Whether to remove html artfacts, should be set to False when preprocessing TyDi QA. Defaults to True
+
+        remove_html_markup(:obj: `bool`): Whether to replace email urls and mentions by special tokens. Defaults to True
         """
+        model_name = model_name.replace("aubmindlab/","")
 
         if model_name not in ACCEPTED_MODELS:
             logging.warning(
@@ -101,6 +106,9 @@ class ArabertPreprocessor:
             self.emoji = emoji
             if self.model_name in SEGMENTED_MODELS:
                 logging.warning("Keeping tweets with Farasa Segmentation is 10 times slower")
+
+        self.remove_html_markup = remove_html_markup
+        self.replace_urls_emails_mentions = replace_urls_emails_mentions
 
     def preprocess(self, text):
         """
@@ -132,22 +140,26 @@ class ArabertPreprocessor:
         text = araby.strip_tashkeel(text)
         text = araby.strip_tatweel(text)
 
-        # delete all possible URLs
-        for reg in url_regexes:
-            text = re.sub(reg, " [رابط] ", text)
-        # REplace Emails with [بريد]
-        for reg in email_regexes:
-            text = re.sub(reg, " [بريد] ", text)
-        # replace mentions with [مستخدم]
-        text = re.sub(user_mention_regex, " [مستخدم] ", text)
-        # remove html line breaks
-        text = re.sub("<br />", " ", text)
-        # remove html markup
-        text = re.sub("</?[^>]+>", " ", text)
-        # insert whitespace before and after all non Arabic figits or English Digits and Alphabet and the 2 brackets
+        if self.replace_urls_emails_mentions:
+            # replace all possible URLs
+            for reg in url_regexes:
+                text = re.sub(reg, " [رابط] ", text)
+            # REplace Emails with [بريد]
+            for reg in email_regexes:
+                text = re.sub(reg, " [بريد] ", text)
+            # replace mentions with [مستخدم]
+            text = re.sub(user_mention_regex, " [مستخدم] ", text)
+
+        if self.remove_html_markup:
+            # remove html line breaks
+            text = re.sub("<br />", " ", text)
+            # remove html markup
+            text = re.sub("</?[^>]+>", " ", text)
+        # insert whitespace before and after all non Arabic digits or English Digits and Alphabet and the 2 brackets
         text = re.sub(
             "([^0-9\u0621-\u063A\u0641-\u064A\u0660-\u0669a-zA-Z\[\]])", r" \1 ", text
         )
+
         # insert whitespace between words and numbers or numbers and words
         text = re.sub("(\d+)([\u0621-\u063A\u0641-\u064A\u0660-\u066C]+)", r" \1 \2 ", text)
         text = re.sub("([\u0621-\u063A\u0641-\u064A\u0660-\u066C]+)(\d+)", r" \1 \2 ", text)
@@ -190,18 +202,21 @@ class ArabertPreprocessor:
         text = re.sub(r"\d+\/[ء-ي]+\/\d+\]", "", text)
         text = re.sub("ـ", "", text)
         text = re.sub("[«»]", ' " ', text)
-        # replace the [رابط] token with space if you want to clean links
-        text = re.sub(regex_url_step1, "[رابط]", text)
-        text = re.sub(regex_url_step2, "[رابط]", text)
-        text = re.sub(regex_url, "[رابط]", text)
-        text = re.sub(regex_email, "[بريد]", text)
-        text = re.sub(regex_mention, "[مستخدم]", text)
+
+        if self.replace_urls_emails_mentions:
+            # replace the [رابط] token with space if you want to clean links
+            text = re.sub(regex_url_step1, "[رابط]", text)
+            text = re.sub(regex_url_step2, "[رابط]", text)
+            text = re.sub(regex_url, "[رابط]", text)
+            text = re.sub(regex_email, "[بريد]", text)
+            text = re.sub(regex_mention, "[مستخدم]", text)
         text = re.sub("…", r"\.", text).strip()
         text = self._remove_redundant_punct(text)
 
-        text = re.sub(r"\[ رابط \]|\[ رابط\]|\[رابط \]", " [رابط] ", text)
-        text = re.sub(r"\[ بريد \]|\[ بريد\]|\[بريد \]", " [بريد] ", text)
-        text = re.sub(r"\[ مستخدم \]|\[ مستخدم\]|\[مستخدم \]", " [مستخدم] ", text)
+        if self.replace_urls_emails_mentions:
+            text = re.sub(r"\[ رابط \]|\[ رابط\]|\[رابط \]", " [رابط] ", text)
+            text = re.sub(r"\[ بريد \]|\[ بريد\]|\[بريد \]", " [بريد] ", text)
+            text = re.sub(r"\[ مستخدم \]|\[ مستخدم\]|\[مستخدم \]", " [مستخدم] ", text)
 
         #text = self._remove_elongation(text)
         text = re.sub(
