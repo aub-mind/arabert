@@ -139,3 +139,4 @@ testing/
 *.tsv
 *.zip
 model_cards/
+results/
