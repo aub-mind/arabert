@@ -87,7 +87,7 @@ python create_pretraining_data.py
 Model | Optimizer | Context size | Embedding Size | Num of heads | Num of layers | Model Size / Num of Params |
  ---|:---:|:---:|:---:|:---:|:---:|:---:
 AraGPT2-base | `lamb` | 1024 | 768 | 12 | 12 | 527MB / 135M |
-AraGPT2-medium | `lamb` | 1024 | 1024 | 16 | 24 | |
+AraGPT2-medium | `lamb` | 1024 | 1024 | 16 | 24 | 1.4GB / 369M |
 AraGPT2-large | `adafactor` | 1024 | 1280 | 20 | 36 | 2.98GB/792M |
 AraGPT2-mega | `adafactor` | 1024 | 1536 | 24 | 48 | 5.5GB/1.46B |
 
@@ -96,7 +96,7 @@ AraGPT2-mega | `adafactor` | 1024 | 1536 | 24 | 48 | 5.5GB/1.46B |
 Model | Hardware | num of examples (seq len = 1024) | Batch Size | Num of Steps | Time (in days)
  ---|:---:|:---:|:---:|:---:|:---:
 AraGPT2-base | TPUv3-128 | 9.7M | 1792 | 125K | 1.5
-AraGPT2-medium | TPUv3-8 | 9.7M | 1152 | 85K | 1.5
+AraGPT2-medium | TPUv3-8 | 9.7M | 80 | 1M | 15
 AraGPT2-large | TPUv3-128 | 9.7M | 256 | 220k | 3
 AraGPT2-mega | TPUv3-128 | 9.7M | 256 | 780K | 9
 
@@ -107,7 +107,7 @@ The results show in the table below are the perplexity values on wikipedia artic
 Model | PPL |
  ---|:---:
 AraGPT2-base | 55.8
-AraGPT2-medium | 49.9
+AraGPT2-medium | 45.7
 AraGPT2-large | 36.6
 AraGPT2-mega | 29.8
 
