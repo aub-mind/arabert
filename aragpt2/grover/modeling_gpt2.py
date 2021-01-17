@@ -848,7 +848,7 @@ class GPT2LMHeadModel(GPT2PreTrainedModel):
     @add_code_sample_docstrings(
         tokenizer_class=_TOKENIZER_FOR_DOC,
         checkpoint="gpt2",
-    output_type= CausalLMOutputWithCrossAttentions,
+        output_type= CausalLMOutputWithCrossAttentions,
         config_class=_CONFIG_FOR_DOC,
     )
     def forward(
@@ -908,7 +908,7 @@ class GPT2LMHeadModel(GPT2PreTrainedModel):
             output = (lm_logits,) + transformer_outputs[1:]
             return ((loss,) + output) if loss is not None else output
 
-    return  CausalLMOutputWithCrossAttentions(
+        return  CausalLMOutputWithCrossAttentions(
             loss=loss,
             logits=lm_logits,
             past_key_values=transformer_outputs.past_key_values,
