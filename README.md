@@ -135,6 +135,8 @@ bert-base-arabertv2
 bert-large-arabertv02
 bert-large-arabertv2
 araelectra-base
+araelectra-base-discriminator
+araelectra-base-generator
 aragpt2-base
 aragpt2-medium
 aragpt2-large
