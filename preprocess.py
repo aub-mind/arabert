@@ -168,7 +168,7 @@ class ArabertPreprocessor:
 
         # remove unwanted characters
         if self.keep_emojis:
-            emoji_regex = "".join(list(self.emoji.UNICODE_EMOJI.keys()))
+            emoji_regex = "".join(list(self.emoji.UNICODE_EMOJI['en'].keys()))
             rejected_chars_regex2 = "[^%s%s]" % (chars_regex, emoji_regex)
             text = re.sub(rejected_chars_regex2, " ", text)
         else:
@@ -183,7 +183,7 @@ class ArabertPreprocessor:
             if self.keep_emojis:
                 new_text = []
                 for word in text.split():
-                    if word in list(self.emoji.UNICODE_EMOJI.keys()):
+                    if word in list(self.emoji.UNICODE_EMOJI['en'].keys()):
                         new_text.append(word)
                     else:
                         new_text.append(self.farasa_segmenter.segment(word))
@@ -292,7 +292,7 @@ class ArabertPreprocessor:
             # insert whitespace before and after all non Arabic digits or English Digits and Alphabet and the 2 brackets
             line_farasa = []
             for word in line_input.split():
-                if word in list(self.emoji.UNICODE_EMOJI.keys()):
+                if word in list(self.emoji.UNICODE_EMOJI['en'].keys()):
                     line_farasa.append(word)
                 else:
                     line_farasa.append(self.farasa_segmenter.segment(word))
