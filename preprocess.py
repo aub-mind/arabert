@@ -175,7 +175,7 @@ class ArabertPreprocessor:
             text = re.sub(rejected_chars_regex, " ", text)
 
          # remove repeated characters >2
-        #text = self._remove_elongation(text)
+        text = self._remove_elongation(text)
         # remove extra spaces
         text = " ".join(text.replace("\uFE0F", "").split())
 
@@ -220,7 +220,7 @@ class ArabertPreprocessor:
             text = re.sub(r"\[ بريد \]|\[ بريد\]|\[بريد \]", " [بريد] ", text)
             text = re.sub(r"\[ مستخدم \]|\[ مستخدم\]|\[مستخدم \]", " [مستخدم] ", text)
 
-        #text = self._remove_elongation(text)
+        text = self._remove_elongation(text)
         text = re.sub(
             "([^0-9\u0621-\u063A\u0641-\u0669\u0671-\u0673a-zA-Z\[\]])", r" \1 ", text
         )
@@ -433,7 +433,7 @@ email_regexes = [r"[\w-]+@([\w-]+\.)+[\w-]+", r"\S+@\S+"]
 redundant_punct_pattern = (
     r"([!\"#\$%\'\(\)\*\+,\.:;\-<=·>?@\[\\\]\^_ـ`{\|}~—٪’،؟`୍“؛”ۚ【»؛\s+«–…‘]{2,})"
 )
-regex_tatweel = r"(\w)\1{2,}"
+regex_tatweel = r"(\D)\1{2,}"
 rejected_chars_regex = r"[^0-9\u0621-\u063A\u0640-\u066C\u0671-\u0674a-zA-Z\[\]!\"#\$%\'\(\)\*\+,\.:;\-<=·>?@\[\\\]\^_ـ`{\|}~—٪’،؟`୍“؛”ۚ»؛\s+«–…‘]"
 
 regex_url_step1 = r"(?=http)[^\s]+"
