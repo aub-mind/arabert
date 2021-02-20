@@ -118,8 +118,8 @@ It is recommended to apply our preprocessing function before training/testing on
 ```python
 from arabert.preprocess import ArabertPreprocessor
 
-model_name = "bert-base-arabertv2"
-arabert_prep = ArabertPreprocessor(model_name=model_name, keep_emojis=False)
+model_name = "aubmindlab/bert-base-arabertv2"
+arabert_prep = ArabertPreprocessor(model_name=model_name)
 
 text = "ولن نبالغ إذا قلنا إن هاتف أو كمبيوتر المكتب في زمننا هذا ضروري"
 arabert_prep.preprocess(text)
@@ -149,22 +149,9 @@ aragpt2-mega
 
 # TensorFlow 1.x models
 
-The TF1.x model are available in the HuggingFace models repo.
-You can download them as follows:
-- via git-lfs: clone all the models in a repo
-```bash
-curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | sudo bash
-sudo apt-get install git-lfs
-git lfs install
-git clone https://huggingface.co/aubmindlab/MODEL_NAME
-tar -C ./MODEL_NAME -zxvf /content/MODEL_NAME/tf1_model.tar.gz
-```
-where `MODEL_NAME` is any model under the `aubmindlab` name
+**You can find the PyTorch, TF2 and TF1 models in HuggingFace's Transformer Library under the ```aubmindlab``` username**
 
-- via `wget`:
-    - Go to the tf1_model.tar.gz file on huggingface.co/models/aubmindlab/MODEL_NAME.
-    - copy the `oid sha256`
-    - then run `wget  https://cdn-lfs.huggingface.co/aubmindlab/aragpt2-base/INSERT_THE_SHA_HERE` (ex: for `aragpt2-base`: `wget https://cdn-lfs.huggingface.co/aubmindlab/aragpt2-base/3766fc03d7c2593ff2fb991d275e96b81b0ecb2098b71ff315611d052ce65248`)
+- `wget https://huggingface.co/aubmindlab/MODEL_NAME/resolve/main/tf1_model.tar.gz` where `MODEL_NAME` is any model under the `aubmindlab` name
 
 
 # If you used this model please cite us as :

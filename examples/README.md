@@ -10,4 +10,6 @@
 
 - NER with ANERCorp-CamelSplits [COLAB](https://colab.research.google.com/drive/1M1yH8rqbxowlSd5R-jr8eBVfGbIyp1zC?usp=sharing) P.S.:  **Use the colab with Hyper Parameter tuning it should be cleaner**
 
+- How to extract word embeddings fro sentences using the Transformers Library [COLAB](https://colab.research.google.com/drive/1Xk8IGcwGTr-YNlB6lhl8jYdIU_M7Mcjx?usp=sharing)
+
 - More colabs to come soon

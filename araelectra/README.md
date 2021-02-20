@@ -22,18 +22,18 @@ We are releasing two pre-trained models:
 
 Model | TyDiQA (EM - F1 ) | ARCD (EM - F1 ) |
 |:----|:----:|:----:|
-AraBERTv0.1| 58.31 - 78.91 | 32.6 - 67.4 |
+AraBERTv0.1| 68.51 - 82.86 | 31.62 - 67.45 |
 AraBERTv1| 61.11 - 79.36 | 31.7 - 67.8 |
-AraBERTv0.2-base| 60.67 - 79.63| 32.76 - 66.53|
+AraBERTv0.2-base| 73.07 - 85.41| 32.76 - 66.53|
 AraBERTv2-base| 61.67 - 81.66| 31.34 - 67.23 |
-AraBERTv0.2-large| 61.56 - 82.38| 33.62 - 66.59 |
+AraBERTv0.2-large| 73.72 - 86.03| 36.89 - **71.32** |
 AraBERTv2-large| 64.49 - 82.51 | 34.19 - 68.12  |
-ArabicBERT-base| 57.00 - 77.53| 30.48 - 62.24 |
-ArabicBERT-large| 59.17 - 80.86| 33.33 - 67.27 |
-Arabic-ALBERT-base| 56.13 - 77.91| 30.91 - 61.33 |
-Arabic-ALBERT-large| 57.33 - 77.02| 34.19 - 65.41 |
-Arabic-ALBERT-xlarge| 61.02 - 80.65| **37.75** - 68.03 |
-AraELECTRA| **65.91 - 83.65**| 34.47 - **67.27** |
+ArabicBERT-base| 67.42 - 81.24| 30.48 - 62.24 |
+ArabicBERT-large| 70.03 - 84.12| 33.33 - 67.27 |
+Arabic-ALBERT-base| 67.10 - 80.98| 30.91 - 61.33 |
+Arabic-ALBERT-large| 68.07 - 81.59| 34.19 - 65.41 |
+Arabic-ALBERT-xlarge| 71.12 - 84.59| **37.75** - 68.03 |
+AraELECTRA| **74.91 - 86.68**| 37.03 - 71.22 |
 
 ## Requirements
 * Python 3

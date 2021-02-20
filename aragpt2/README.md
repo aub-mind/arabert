@@ -26,8 +26,8 @@ from arabert.aragpt2.grover.modeling_gpt2 import GPT2LMHeadModel
 
 from arabert.preprocess import ArabertPreprocessor
 
-MODEL_NAME='aragpt2-base'
-arabert_prep = ArabertPreprocessor(model_name=MODEL_NAME, keep_emojis=True)
+MODEL_NAME='aubmindlab/aragpt2-base'
+arabert_prep = ArabertPreprocessor(model_name=MODEL_NAME)
 
 model = GPT2LMHeadModel.from_pretrained(MODEL_NAME)
 tokenizer = GPT2TokenizerFast.from_pretrained(MODEL_NAME)
