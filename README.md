@@ -121,12 +121,22 @@ from arabert.preprocess import ArabertPreprocessor
 model_name = "aubmindlab/bert-base-arabertv2"
 arabert_prep = ArabertPreprocessor(model_name=model_name)
 
-text = "ولن نبالغ إذا قلنا إن هاتف أو كمبيوتر المكتب في زمننا هذا ضروري"
+text = "ولن نبالغ إذا قلنا: إن 'هاتف' أو 'كمبيوتر المكتب' في زمننا هذا ضروري"
 arabert_prep.preprocess(text)
->>>"و+ لن نبالغ إذا قل +نا إن هاتف أو كمبيوتر ال+ مكتب في زمن +نا هذا ضروري"
+>>>"و+ لن نبالغ إذا قل +نا : إن ' هاتف ' أو ' كمبيوتر ال+ مكتب ' في زمن +نا هذا ضروري"
 ```
 
-## Accepted_models
+You can also use the `unpreprocess()` function to reverse the preprocessing changes, by fixing the spacing around non alphabetical characters, and also de-segmenting if the model selected need pre-segmentation. We highly recommend unprocessing generated content of `AraGPT2` model, to make it look more natural.
+```python
+output_text = "و+ لن نبالغ إذا قل +نا : إن ' هاتف ' أو ' كمبيوتر ال+ مكتب ' في زمن +نا هذا ضروري"
+arabert_prep.unpreprocess(output_text)
+>>>"ولن نبالغ إذا قلنا: إن 'هاتف' أو 'كمبيوتر المكتب' في زمننا هذا ضروري"
+```
+
+### Accepted Model Names:
+The `ArabertPreprocessor` class expects one of the following model names:
+
+Note: You can also use the same model name from the `HuggingFace` model repository without removing `aubmindlab/`
 ```
 bert-base-arabertv01
 bert-base-arabert

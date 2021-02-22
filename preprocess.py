@@ -1,6 +1,7 @@
-import re
 import html
 import logging
+import re
+
 import pyarabic.araby as araby
 
 ACCEPTED_MODELS = [
@@ -16,7 +17,7 @@ ACCEPTED_MODELS = [
     "aragpt2-base",
     "aragpt2-medium",
     "aragpt2-large",
-    "aragpt2-mega"
+    "aragpt2-mega",
 ]
 
 SEGMENTED_MODELS = [
@@ -29,10 +30,11 @@ SEGMENTED_MODELS = [
 class ArabertPreprocessor:
     """
     A Preprocessor class that cleans and preprocesses text for all models in the AraBERT repo.
+    It also can unprocess the text ouput of the generated text
 
     Args:
 
-        model_name (:obj:`str`): model name from the HuggingFace Models page without the aubmindlab tag. Current accepted models are:
+        model_name (:obj:`str`): model name from the HuggingFace Models page with or without `aubmindlab/`. Current accepted models are:
 
             - :obj:`"bert-base-arabertv01"`: No farasa segmentation.
             - :obj:`"bert-base-arabert"`: with farasa segmentation.
@@ -41,12 +43,18 @@ class ArabertPreprocessor:
             - :obj:`"bert-large-arabertv02"`: No farasas egmentation.
             - :obj:`"bert-large-arabertv2"`: with farasa segmentation.
             - :obj:`"araelectra-base"`: No farasa segmentation.
+            - :obj:`"araelectra-base-discriminator"`: No farasa segmentation.
+            - :obj:`"araelectra-base-generator"`: No farasa segmentation.
             - :obj:`"aragpt2-base"`: No farasa segmentation.
             - :obj:`"aragpt2-medium"`: No farasa segmentation.
             - :obj:`"aragpt2-large"`: No farasa segmentation.
             - :obj:`"aragpt2-mega"`: No farasa segmentation.
 
-        keep_emojis(:obj: `bool`): don't remove emojis while preprocessing. Defaults to False
+    keep_emojis(:obj: `bool`): don't remove emojis while preprocessing. Defaults to False
+
+    remove_html_markup(:obj: `bool`): Whether to remove html artfacts, should be set to False when preprocessing TyDi QA. Defaults to True
+
+    remove_html_markup(:obj: `bool`): Whether to replace email urls and mentions by special tokens. Defaults to True
 
     Returns:
 
@@ -60,7 +68,13 @@ class ArabertPreprocessor:
         arabert_prep.preprocess("SOME ARABIC TEXT")
     """
 
-    def __init__(self, model_name, keep_emojis=False, remove_html_markup=True, replace_urls_emails_mentions=True):
+    def __init__(
+        self,
+        model_name,
+        keep_emojis=False,
+        remove_html_markup=True,
+        replace_urls_emails_mentions=True,
+    ):
         """
         model_name (:obj:`str`): model name from the HuggingFace Models page without the aubmindlab tag. Current accepted models are:
 
@@ -71,6 +85,8 @@ class ArabertPreprocessor:
             - :obj:`"bert-large-arabertv02"`: No farasas egmentation.
             - :obj:`"bert-large-arabertv2"`: with farasa segmentation.
             - :obj:`"araelectra-base"`: No farasa segmentation.
+            - :obj:`"araelectra-base-discriminator"`: No farasa segmentation.
+            - :obj:`"araelectra-base-generator"`: No farasa segmentation.
             - :obj:`"aragpt2-base"`: No farasa segmentation.
             - :obj:`"aragpt2-medium"`: No farasa segmentation.
             - :obj:`"aragpt2-large"`: No farasa segmentation.
@@ -82,7 +98,7 @@ class ArabertPreprocessor:
 
         remove_html_markup(:obj: `bool`): Whether to replace email urls and mentions by special tokens. Defaults to True
         """
-        model_name = model_name.replace("aubmindlab/","")
+        model_name = model_name.replace("aubmindlab/", "")
 
         if model_name not in ACCEPTED_MODELS:
             logging.warning(
@@ -93,21 +109,31 @@ class ArabertPreprocessor:
             self.model_name = model_name
 
         if self.model_name in SEGMENTED_MODELS:
-            logging.info("Selected Model requires pre-segmentation, Initializing FarasaSegmenter")
+            logging.info(
+                "Selected Model requires pre-segmentation, Initializing FarasaSegmenter"
+            )
             try:
                 from farasa.segmenter import FarasaSegmenter
+
                 self.farasa_segmenter = FarasaSegmenter(interactive=True)
             except:
-                logging.warning("farasapy is not installed, you want be able to process text for AraBERTv1 and v2. Install it using: pip install farasapy")
+                logging.warning(
+                    "farasapy is not installed, you want be able to process text for AraBERTv1 and v2. Install it using: pip install farasapy"
+                )
         else:
-            logging.info("Selected Model doesn't require pre-segmentation, skipping FarasaSegmenter initialization")
+            logging.info(
+                "Selected Model doesn't require pre-segmentation, skipping FarasaSegmenter initialization"
+            )
 
         self.keep_emojis = keep_emojis
         if self.keep_emojis:
             import emoji
+
             self.emoji = emoji
             if self.model_name in SEGMENTED_MODELS:
-                logging.warning("Keeping tweets with Farasa Segmentation is 10 times slower")
+                logging.warning(
+                    "Keeping tweets with Farasa Segmentation is 10 times slower"
+                )
 
         self.remove_html_markup = remove_html_markup
         self.replace_urls_emails_mentions = replace_urls_emails_mentions
@@ -132,10 +158,7 @@ class ArabertPreprocessor:
             )
 
         if self.model_name == "bert-base-arabertv01":
-            return self._old_preprocess(
-                text,
-                do_farasa_tokenization=False
-            )
+            return self._old_preprocess(text, do_farasa_tokenization=False)
 
         text = str(text)
         text = html.unescape(text)
@@ -163,27 +186,34 @@ class ArabertPreprocessor:
         )
 
         # insert whitespace between words and numbers or numbers and words
-        text = re.sub("(\d+)([\u0621-\u063A\u0641-\u064A\u0660-\u066C]+)", r" \1 \2 ", text)
-        text = re.sub("([\u0621-\u063A\u0641-\u064A\u0660-\u066C]+)(\d+)", r" \1 \2 ", text)
+        text = re.sub(
+            "(\d+)([\u0621-\u063A\u0641-\u064A\u0660-\u066C]+)", r" \1 \2 ", text
+        )
+        text = re.sub(
+            "([\u0621-\u063A\u0641-\u064A\u0660-\u066C]+)(\d+)", r" \1 \2 ", text
+        )
 
         # remove unwanted characters
         if self.keep_emojis:
-            emoji_regex = "".join(list(self.emoji.UNICODE_EMOJI['en'].keys()))
+            emoji_regex = "".join(list(self.emoji.UNICODE_EMOJI["en"].keys()))
             rejected_chars_regex2 = "[^%s%s]" % (chars_regex, emoji_regex)
             text = re.sub(rejected_chars_regex2, " ", text)
         else:
             text = re.sub(rejected_chars_regex, " ", text)
 
-         # remove repeated characters >2
+        # remove repeated characters >2
         text = self._remove_elongation(text)
         # remove extra spaces
         text = " ".join(text.replace("\uFE0F", "").split())
 
-        if self.model_name == "bert-base-arabertv2" or self.model_name == "bert-large-arabertv2":
+        if (
+            self.model_name == "bert-base-arabertv2"
+            or self.model_name == "bert-large-arabertv2"
+        ):
             if self.keep_emojis:
                 new_text = []
                 for word in text.split():
-                    if word in list(self.emoji.UNICODE_EMOJI['en'].keys()):
+                    if word in list(self.emoji.UNICODE_EMOJI["en"].keys()):
                         new_text.append(word)
                     else:
                         new_text.append(self.farasa_segmenter.segment(word))
@@ -194,6 +224,72 @@ class ArabertPreprocessor:
 
         # ALl the other models dont require Farasa Segmentation
         return text
+
+    def unpreprocess(self, text, desegment=True):
+        """Re-formats the text to a classic format where punctuations, brackets, parenthesis are not seperated by whitespaces.
+        The objective is to make the generated text of any model appear natural and note preprocessed.
+
+        Args:
+            text (str): input text to be un-preprocessed
+            desegment (bool, optional): [whether or not to remove farasa pre-segmentation before]. Defaults to True.
+
+        Returns:
+            [type]: [description]
+        """
+
+        if self.model_name in SEGMENTED_MODELS and desegment:
+            text = self.desegment(text)
+
+        # removes the spaces around quotation marks ex: i " ate " an apple --> i "ate" an apple
+        # https://stackoverflow.com/a/53436792/5381220
+        text = re.sub(white_spaced_double_quotation_regex, '"' + r"\1" + '"', text)
+        text = re.sub(white_spaced_single_quotation_regex, "'" + r"\1" + "'", text)
+        text = re.sub(white_spaced_back_quotation_regex, "\`" + r"\1" + "\`", text)
+        text = re.sub(white_spaced_back_quotation_regex, "\—" + r"\1" + "\—", text)
+
+        # during generation, sometimes the models don't put a space after the dot, this handles it
+        text = text.replace(".", " . ")
+        text = " ".join(text.split())
+
+        # handle decimals
+        text = re.sub(r"(\d+) \. (\d+)", r"\1.\2", text)
+
+        text = re.sub(left_and_right_spaced_chars, r"\1", text)
+        text = re.sub(left_spaced_chars, r"\1", text)
+        text = re.sub(right_spaced_chars, r"\1", text)
+
+        return text
+
+    def desegment(self, text):
+        """
+        Use this function if sentence tokenization was done using
+        `from arabert.preprocess_arabert import preprocess` with Farasa enabled
+        AraBERT segmentation using Farasa adds a space after the '+' for prefixes,
+        and after before the '+' for suffixes
+
+        Example:
+        >>> desegment('ال+ دراس +ات')
+        الدراسات
+        """
+        text = text.replace("+ ", "+")
+        text = text.replace(" +", "+")
+        text = " ".join([self._desegmentword(word) for word in text.split(" ")])
+        return text
+
+    def _desegmentword(self, orig_word: str) -> str:
+        """
+        Word segmentor that takes a Farasa Segmented Word and removes the '+' signs
+
+        Example:
+        >>> _desegmentword("ال+يومي+ة")
+        اليومية
+        """
+        word = orig_word.replace("ل+ال+", "لل")
+        if "ال+ال" not in orig_word:
+            word = word.replace("ل+ال", "لل")
+        word = word.replace("+", "")
+        word = word.replace("للل", "لل")
+        return word
 
     def _old_preprocess(self, text, do_farasa_tokenization):
         """
@@ -235,7 +331,10 @@ class ArabertPreprocessor:
         for index, word in enumerate(line_farasa):
             if word in ["[", "]"]:
                 continue
-            if word in ["رابط", "بريد", "مستخدم"] and line_farasa[index - 1] in ["[", "]"]:
+            if word in ["رابط", "بريد", "مستخدم"] and line_farasa[index - 1] in [
+                "[",
+                "]",
+            ]:
                 segmented_line.append("[" + word + "]")
                 continue
             if "+" not in word:
@@ -292,7 +391,7 @@ class ArabertPreprocessor:
             # insert whitespace before and after all non Arabic digits or English Digits and Alphabet and the 2 brackets
             line_farasa = []
             for word in line_input.split():
-                if word in list(self.emoji.UNICODE_EMOJI['en'].keys()):
+                if word in list(self.emoji.UNICODE_EMOJI["en"].keys()):
                     line_farasa.append(word)
                 else:
                     line_farasa.append(self.farasa_segmenter.segment(word))
@@ -303,7 +402,10 @@ class ArabertPreprocessor:
         for index, word in enumerate(line_farasa):
             if word in ["[", "]"]:
                 continue
-            if word in ["رابط", "بريد", "مستخدم"] and line_farasa[index - 1] in ["[", "]"]:
+            if word in ["رابط", "بريد", "مستخدم"] and line_farasa[index - 1] in [
+                "[",
+                "]",
+            ]:
                 segmented_line.append("[" + word + "]")
                 continue
             segmented_word = []
@@ -346,11 +448,14 @@ class ArabertPreprocessor:
             text = "".join(
                 (text[: result.span()[0] + dif], sub, text[result.span()[1] + dif :])
             )
-            text_ = "".join((text_[: result.span()[0]], text_[result.span()[1] :])).strip()
+            text_ = "".join(
+                (text_[: result.span()[0]], text_[result.span()[1] :])
+            ).strip()
             dif = abs(len(text) - len(text_))
             result = re.search(redundant_punct_pattern, text_)
         text = re.sub(r"\s+", " ", text)
         return text.strip()
+
 
 prefix_list = [
     "ال",
@@ -443,3 +548,12 @@ regex_mention = r"@[\w\d]+"
 regex_email = r"\S+@\S+"
 
 chars_regex = r"0-9\u0621-\u063A\u0640-\u066C\u0671-\u0674a-zA-Z\[\]!\"#\$%\'\(\)\*\+,\.:;\-<=·>?@\[\\\]\^_ـ`{\|}~—٪’،؟`୍“؛”ۚ»؛\s+«–…‘"
+
+white_spaced_double_quotation_regex = r'\"\s+([^"]+)\s+\"'
+white_spaced_single_quotation_regex = r"\'\s+([^']+)\s+\'"
+white_spaced_back_quotation_regex = r"\`\s+([^`]+)\s+\`"
+white_spaced_em_dash = r"\—\s+([^—]+)\s+\—"
+
+left_spaced_chars = r" ([\]!#\$%\),\.:;\?}٪’،؟”؛…»·])"
+right_spaced_chars = r"([\[\(\{“«‘*\~]) "
+left_and_right_spaced_chars = r" ([\+\-\<\=\>\@\\\^\_\|\–]) "
