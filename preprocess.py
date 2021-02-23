@@ -64,7 +64,7 @@ class ArabertPreprocessor:
 
         from preprocess import ArabertPreprocessor
 
-        arabert_prep = ArabertPreprocessor("bert-base-arabertv2",keep_emojis=False)
+        arabert_prep = ArabertPreprocessor("bert-base-arabertv2")
         arabert_prep.preprocess("SOME ARABIC TEXT")
     """
 
