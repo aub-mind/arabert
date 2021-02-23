@@ -253,6 +253,7 @@ class ArabertPreprocessor:
 
         # handle decimals
         text = re.sub(r"(\d+) \. (\d+)", r"\1.\2", text)
+        text = re.sub(r"(\d+) \, (\d+)", r"\1.\2", text)
 
         text = re.sub(left_and_right_spaced_chars, r"\1", text)
         text = re.sub(left_spaced_chars, r"\1", text)
