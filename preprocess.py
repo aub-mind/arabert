@@ -54,7 +54,7 @@ class ArabertPreprocessor:
 
     remove_html_markup(:obj: `bool`): Whether to remove html artfacts, should be set to False when preprocessing TyDi QA. Defaults to True
 
-    remove_html_markup(:obj: `bool`): Whether to replace email urls and mentions by special tokens. Defaults to True
+    replace_urls_emails_mentions(:obj: `bool`): Whether to replace email urls and mentions by special tokens. Defaults to True
 
     Returns:
 
@@ -96,7 +96,7 @@ class ArabertPreprocessor:
 
         remove_html_markup(:obj: `bool`): Whether to remove html artfacts, should be set to False when preprocessing TyDi QA. Defaults to True
 
-        remove_html_markup(:obj: `bool`): Whether to replace email urls and mentions by special tokens. Defaults to True
+        replace_urls_emails_mentions(:obj: `bool`): Whether to replace email urls and mentions by special tokens. Defaults to True
         """
         model_name = model_name.replace("aubmindlab/", "")
 
@@ -227,14 +227,14 @@ class ArabertPreprocessor:
 
     def unpreprocess(self, text, desegment=True):
         """Re-formats the text to a classic format where punctuations, brackets, parenthesis are not seperated by whitespaces.
-        The objective is to make the generated text of any model appear natural and note preprocessed.
+        The objective is to make the generated text of any model appear natural and not preprocessed.
 
         Args:
             text (str): input text to be un-preprocessed
             desegment (bool, optional): [whether or not to remove farasa pre-segmentation before]. Defaults to True.
 
         Returns:
-            [type]: [description]
+            str: The unpreprocessed (and possibly Farasa-desegmented) text.
         """
 
         if self.model_name in SEGMENTED_MODELS and desegment:
