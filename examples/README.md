@@ -4,6 +4,8 @@
 
 - text generation with AraGPT2 [COLAB](https://colab.research.google.com/drive/1T5xKRAtKeuUmmokyThvkK8pulHw02CoK?usp=sharing)
 
+- Zero-Shot Question Answering and Translation with AraGPT2-mega [COLAB](https://colab.research.google.com/drive/1NBghhl2laYZ9jHPKYWTLLUM8R1LePdU6?usp=sharing)
+
 - Text-classification/Sentiment Analysis with Hyper Parameter tuning [COLAB](https://colab.research.google.com/drive/1P9iQHtUH5KUbTVtp8B4-AopZzEEPE0lw?usp=sharing)
 
 - NER with ANERCorp-CamelSplits and Hyper Parameter tuning [COLAB](https://colab.research.google.com/drive/128wX6r_Nz-2LZ_lROeWjWS_yTi96KR7J?usp=sharing)
