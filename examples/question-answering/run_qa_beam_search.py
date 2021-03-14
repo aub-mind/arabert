@@ -40,10 +40,9 @@ from transformers import (
     set_seed,
 )
 
-from arabert.electra import (
-    ElectraConfig,
-    ElectraForQuestionAnsweringBeamSearch,
-)
+from arabert.araelectra.configuration_electra import ElectraConfig
+from arabert.araelectra.finetune.qa.modeling_electra import ElectraForQuestionAnsweringBeamSearch
+
 
 from transformers.trainer_utils import get_last_checkpoint, is_main_process
 from utils_qa import postprocess_qa_predictions_with_beam_search
