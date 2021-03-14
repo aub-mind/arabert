@@ -4,7 +4,7 @@
 
 - For Question Answering check the `question-answering` folder, and these 2 notebooks:
     - Arabic TyDiQA: [COLAB](https://colab.research.google.com/drive/1hik0L_Dxg6WwJFcDPP1v74motSkst4gE?usp=sharing)
-    - Arabic-SQuAD + ARCD: [COLAB]()
+    - Arabic-SQuAD + ARCD: [COLAB](https://colab.research.google.com/drive/1eIoVxKZP9KWLumkHHrfmU8Vtb-BLWiVD?usp=sharing)
 
 - text generation with AraGPT2 [COLAB](https://colab.research.google.com/drive/1T5xKRAtKeuUmmokyThvkK8pulHw02CoK?usp=sharing)
 
