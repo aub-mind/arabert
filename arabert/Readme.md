@@ -68,54 +68,6 @@ arabert_tokenizer.tokenize(text_preprocessed)
 >>> ['ولن', 'ن', '##بالغ', 'إذا', 'قلنا', 'إن', 'هاتف', 'أو', 'كمبيوتر', 'المكتب', 'في', 'زمن', '##ن', '##ا', 'هذا', 'ضروري']
 ```
 
-**Examples**
-
-`AraBERT_ANERCorp_CamelSplits.ipynb` is a demo of AraBERT for token classification on the ANERCorp dataset.
-
-`araBERT_(Updated_Demo_TF).ipynb` is a demo using the AJGT dataset using TensorFlow Estimators (GPU and TPU compatible).
-
-`AraBERT_PyTorch_Demo.ipynb` is a demo using the AJGT dataset using HuggingFace's Transformers API for PyTorch (GPU compatible)
-
-`AraBERT_with_fast_bert.ipynb` is a demo using the AJGT dataset with Fast-Bert library
-
-`AraBERT_Fill_Mask.ipynb` is a demo of the Masked Language capabilites and how it is better than other models that support Arabic
-
-`AraBert_output_Embeddings_PyTorch.ipynb` is a demo on how to extract word embeddings fro sentences using the Transformers Library
-
-`AraBERT_Text_Classification_with_HF_Trainer_Pytorch_GPU.ipynb` is a demo using the AJGT dataset using HuggingFace's Trainer API for PyTorch (GPU compatible) Note: TPU compatibility should be enabled in the `TrainingArguments` but not tested yet
-
-`MTL_AraBERT_Offensive_Lanaguage_detection.ipynb`  is the code used in the in the [OSACT4 - shared task on Offensive language detection (LREC 2020)](http://edinburghnlp.inf.ed.ac.uk/workshops/OSACT4/). Paper [Link](https://www.aclweb.org/anthology/2020.osact-1.16/)
-
-**AraBERT on ARCD**
-
-During the preprocessing step the ```answer_start``` character position needs to be recalculated. You can use the file ```arcd_preprocessing.py``` as shown below to clean, preprocess the ARCD dataset before running ```run_squad.py```. More detailed Colab notebook is available in the [SOQAL repo](https://github.com/husseinmozannar/SOQAL).
-```bash
-python arcd_preprocessing.py \
-    --input_file="/PATH_TO/arcd-test.json" \
-    --output_file="arcd-test-pre.json" \
-    --do_farasa_tokenization=True \
-    --use_farasapy=True \
-```
-```bash
-python run_squad.py \
-  --vocab_file="/PATH_TO_PRETRAINED_TF_CKPT/vocab.txt" \
-  --bert_config_file="/PATH_TO_PRETRAINED_TF_CKPT/config.json" \
-  --init_checkpoint="/PATH_TO_PRETRAINED_TF_CKPT/" \
-  --do_train=True \
-  --train_file=turk_combined_all_pre.json \
-  --do_predict=True \
-  --predict_file=arcd-test-pre.json \
-  --train_batch_size=32 \
-  --predict_batch_size=24 \
-  --learning_rate=3e-5 \
-  --num_train_epochs=4 \
-  --max_seq_length=384 \
-  --doc_stride=128 \
-  --do_lower_case=False\
-  --output_dir="/PATH_TO/OUTPUT_PATH"/ \
-  --use_tpu=True \
-  --tpu_name=$TPU_ADDRESS \
-```
 ## Model Weights and Vocab Download
 
 **You can find the PyTorch, TF2 and TF1 models in HuggingFace's Transformer Library under the ```aubmindlab``` username**
