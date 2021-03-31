@@ -12,12 +12,12 @@ We evalaute AraBERT models on different downstream tasks and compare them to [mB
 ## Results
 Task | Metric | AraBERTv0.1 | AraBERTv1 | AraBERTv0.2-base | AraBERTv2-Base | AraBERTv0.2-large | AraBERTv2-large| AraELECTRA-Base
 :---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-HARD |Acc.|**96.2**|96.1|soon|soon|soon|soon|soon
-ASTD |Acc.|92.2|**92.6**|soon|soon|soon|soon|soon
-ArsenTD-Lev|Acc.|58.9|**59.4**|soon|soon|soon|soon|soon
-AJGT|Acc.|93.1|**93.8**|soon|soon|soon|soon|soon
-LABR|Acc.|85.9|**86.7**|soon|soon|soon|soon|soon
-ANERcorp|macro-F1|**83.1**|82.4|soon|soon|soon|soon|soon
+HARD |Acc.|**96.2**|96.1|-|-|-|-|-
+ASTD |Acc.|92.2|**92.6**|-|-|-|-|-
+ArsenTD-Lev|macro-f1|53.56|-|55.71|-|56.94|-|**57.20**
+AJGT|Acc.|93.1|**93.8**|-|-|-|-|-
+LABR|Acc.|85.9|**86.7**|-|-|-|-|-
+ANERcorp|macro-F1|83.1|82.4|83.70|-|83.08|-|**83.95**
 ARCD|EM - F1|31.62 - 67.45|31.7 - 67.8|32.76 - 66.53|31.34 - 67.23|36.89 - **71.32**|34.19 - 68.12|**37.03** - 71.22
 TyDiQA-ar|EM - F1|68.51 - 82.86|- |73.07 - 85.41|-|73.72 - 86.03|-|**74.91 - 86.68**
 
