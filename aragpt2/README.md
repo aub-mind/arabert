@@ -13,6 +13,11 @@ Both models are trained using the `adafactor` optimizer, since the `adam` and `l
 
 AraGPT2 is trained on the same large Arabic Dataset as AraBERTv2.
 
+# AraGPT2 Detector
+Machine generated detector model from the [AraGPT2: Pre-Trained Transformer for Arabic Language Generation paper](https://arxiv.org/abs/2012.15520)
+This model is trained on the long text passages, and achieves a 99.4% F1-Score.
+
+
 # Usage
 
 ## Testing the model using `transformers`:
@@ -46,6 +51,21 @@ generation_pipeline(
     repetition_penalty = 3.0,
     no_repeat_ngram_size = 3)[0]['generated_text']
 ```
+## How to use the detector:
+
+```python
+from transformers import pipeline
+from arabert.preprocess import ArabertPreprocessor
+
+processor = ArabertPreprocessor(model="aubmindlab/araelectra-base-discriminator")
+pipe = pipeline("sentiment-analysis", model = "aubmindlab/aragpt2-mega-detector-long")
+
+text = " "
+text_prep = processor.preprocess(text)
+result = pipe(text_prep)
+# [{'label': 'machine-generated', 'score': 0.9977743625640869}]
+```
+
 ## Finetunning using `transformers`:
 
 Follow the guide linked [here](https://towardsdatascience.com/fine-tuning-gpt2-on-colab-gpu-for-free-340468c92ed)

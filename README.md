@@ -4,9 +4,9 @@
 
 This repository now contains code and implementation for:
 - **AraBERT v0.1/v1**: Original
-- **AraBERT v0.2/v2**: Base and large versions with better vocabulary, more data, more training, [Read More..](#AraBERT)
-- **AraGPT2**: base, medium, large and MEGA. Trained from scratch on Arabic, [Read More..](#AraGPT2)
-- **AraELECTRA**: Trained from scratch on Arabic [Read More..](#AraELECTRA)
+- **AraBERT v0.2/v2**: Base and large versions with better vocabulary, more data, more training [Read More...](#AraBERT)
+- **AraGPT2**: base, medium, large and MEGA. Trained from scratch on Arabic [Read More...](#AraGPT2)
+- **AraELECTRA**: Trained from scratch on Arabic [Read More...](#AraELECTRA)
 
 If you want to clone the old repository:
 ```bash
@@ -67,6 +67,7 @@ More details and code are available in the AraGPT2 folder and [README](https://g
  AraGPT2-medium | [aragpt2-medium](https://huggingface.co/aubmindlab/aragpt2-medium) |  1.38G/370M  |
  AraGPT2-large | [aragpt2-large](https://huggingface.co/aubmindlab/aragpt2-large) |  2.98GB/792M  |
  AraGPT2-mega | [aragpt2-mega](https://huggingface.co/aubmindlab/aragpt2-mega) |  5.5GB/1.46B  |
+ AraGPT2-mega-detector-long | [aragpt2-mega-detector-long](https://huggingface.co/aubmindlab/aragpt2-mega-detector-long) | 516MB/135M |
 
 All models are available in the `HuggingFace` model page under the [aubmindlab](https://huggingface.co/aubmindlab/) name. Checkpoints are available in PyTorch, TF2 and TF1 formats.
 
@@ -108,7 +109,7 @@ For the new dataset we added the unshuffled OSCAR corpus, after we thoroughly fi
 - [Arabic Wikipedia dump](https://archive.org/details/arwiki-20190201) from 2020/09/01
 - [The 1.5B words Arabic Corpus](https://www.semanticscholar.org/paper/1.5-billion-words-Arabic-Corpus-El-Khair/f3eeef4afb81223df96575adadf808fe7fe440b4)
 - [The OSIAN Corpus](https://www.aclweb.org/anthology/W19-4619)
-- Assafir news articles. Huge thank you for Assafir for giving us the data
+- Assafir news articles. Huge thank you for Assafir for the data
 
 # Preprocessing
 
@@ -136,7 +137,8 @@ arabert_prep.unpreprocess(output_text)
 ### Accepted Model Names:
 The `ArabertPreprocessor` class expects one of the following model names:
 
-Note: You can also use the same model name from the `HuggingFace` model repository without removing `aubmindlab/`
+Note: You can also use the same model name from the `HuggingFace` model repository without removing `aubmindlab/`. Defaults to `bert-base-arabertv02` with no pre-segmentation
+
 ```
 bert-base-arabertv01
 bert-base-arabert
@@ -204,9 +206,9 @@ Google Scholar has our Bibtex wrong (missing name), use this instead
 Thanks to TensorFlow Research Cloud (TFRC) for the free access to Cloud TPUs, couldn't have done it without this program, and to the [AUB MIND Lab](https://sites.aub.edu.lb/mindlab/) Members for the continous support. Also thanks to [Yakshof](https://www.yakshof.com/#/) and Assafir for data and storage access. Another thanks for Habib Rahal (https://www.behance.net/rahalhabib), for putting a face to AraBERT.
 
 # Contacts
-**Wissam Antoun**: [Linkedin](https://www.linkedin.com/in/wissam-antoun-622142b4/) | [Twitter](https://twitter.com/wissam_antoun) | [Github](https://github.com/WissamAntoun) | <wfa07@mail.aub.edu> | <wissam.antoun@gmail.com>
+**Wissam Antoun**: [Linkedin](https://www.linkedin.com/in/wissam-antoun-622142b4/) | [Twitter](https://twitter.com/wissam_antoun) | [Github](https://github.com/WissamAntoun) | wfa07 (AT) mail (DOT) aub (DOT) edu | wissam.antoun (AT) gmail (DOT) com
 
-**Fady Baly**: [Linkedin](https://www.linkedin.com/in/fadybaly/) | [Twitter](https://twitter.com/fadybaly) | [Github](https://github.com/fadybaly) | <fgb06@mail.aub.edu> | <baly.fady@gmail.com>
+**Fady Baly**: [Linkedin](https://www.linkedin.com/in/fadybaly/) | [Twitter](https://twitter.com/fadybaly) | [Github](https://github.com/fadybaly) | fgb06 (AT) mail (DOT) aub (DOT) edu | baly.fady (AT) gmail (DOT) com
 
 
 
