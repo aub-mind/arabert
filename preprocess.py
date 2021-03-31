@@ -34,49 +34,7 @@ class ArabertPreprocessor:
 
     Args:
 
-        model_name (:obj:`str`): model name from the HuggingFace Models page with or without `aubmindlab/`. Current accepted models are:
-
-            - :obj:`"bert-base-arabertv01"`: No farasa segmentation.
-            - :obj:`"bert-base-arabert"`: with farasa segmentation.
-            - :obj:`"bert-base-arabertv02"`: No farasas egmentation.
-            - :obj:`"bert-base-arabertv2"`: with farasa segmentation.
-            - :obj:`"bert-large-arabertv02"`: No farasas egmentation.
-            - :obj:`"bert-large-arabertv2"`: with farasa segmentation.
-            - :obj:`"araelectra-base"`: No farasa segmentation.
-            - :obj:`"araelectra-base-discriminator"`: No farasa segmentation.
-            - :obj:`"araelectra-base-generator"`: No farasa segmentation.
-            - :obj:`"aragpt2-base"`: No farasa segmentation.
-            - :obj:`"aragpt2-medium"`: No farasa segmentation.
-            - :obj:`"aragpt2-large"`: No farasa segmentation.
-            - :obj:`"aragpt2-mega"`: No farasa segmentation.
-
-    keep_emojis(:obj: `bool`): don't remove emojis while preprocessing. Defaults to False
-
-    remove_html_markup(:obj: `bool`): Whether to remove html artfacts, should be set to False when preprocessing TyDi QA. Defaults to True
-
-    replace_urls_emails_mentions(:obj: `bool`): Whether to replace email urls and mentions by special tokens. Defaults to True
-
-    Returns:
-
-        ArabertPreprocessor: the preprocessor class
-
-    Example:
-
-        from preprocess import ArabertPreprocessor
-
-        arabert_prep = ArabertPreprocessor("bert-base-arabertv2")
-        arabert_prep.preprocess("SOME ARABIC TEXT")
-    """
-
-    def __init__(
-        self,
-        model_name,
-        keep_emojis=False,
-        remove_html_markup=True,
-        replace_urls_emails_mentions=True,
-    ):
-        """
-        model_name (:obj:`str`): model name from the HuggingFace Models page without the aubmindlab tag. Current accepted models are:
+        model_name (:obj:`str`): model name from the HuggingFace Models page without the aubmindlab tag. Defaults to "bert-base-arabertv02". Current accepted models are:
 
             - :obj:`"bert-base-arabertv01"`: No farasa segmentation.
             - :obj:`"bert-base-arabert"`: with farasa segmentation.
@@ -97,6 +55,71 @@ class ArabertPreprocessor:
         remove_html_markup(:obj: `bool`): Whether to remove html artfacts, should be set to False when preprocessing TyDi QA. Defaults to True
 
         replace_urls_emails_mentions(:obj: `bool`): Whether to replace email urls and mentions by special tokens. Defaults to True
+
+        strip_tashkeel(:obj: `bool`): remove diacritics (FATHATAN, DAMMATAN, KASRATAN, FATHA, DAMMA, KASRA, SUKUN, SHADDA)
+
+        strip_tatweel(:obj: `bool`): remove tatweel '\\u0640'
+
+        insert_white_spaces(:obj: `bool`): insert whitespace before and after all non Arabic digits or English digits or Arabic and English Alphabet or the 2 brackets, then inserts whitespace between words and numbers or numbers and words
+
+        remove_elongation(:obj: `bool`): replace repetition of more than 2 non-digit character with 2 of this character
+
+
+    Returns:
+
+        ArabertPreprocessor: the preprocessor class
+
+    Example:
+
+        from preprocess import ArabertPreprocessor
+
+        arabert_prep = ArabertPreprocessor("aubmindlab/bert-base-arabertv2")
+
+        arabert_prep.preprocess("SOME ARABIC TEXT")
+    """
+
+    def __init__(
+        self,
+        model_name,
+        keep_emojis=False,
+        remove_html_markup=True,
+        replace_urls_emails_mentions=True,
+        strip_tashkeel=True,
+        strip_tatweel=True,
+        insert_white_spaces=True,
+        remove_elongation=True,
+    ):
+        """
+        model_name (:obj:`str`): model name from the HuggingFace Models page without the aubmindlab tag. Defaults to "bert-base-arabertv02". Current accepted models are:
+
+            - :obj:`"bert-base-arabertv01"`: No farasa segmentation.
+            - :obj:`"bert-base-arabert"`: with farasa segmentation.
+            - :obj:`"bert-base-arabertv02"`: No farasas egmentation.
+            - :obj:`"bert-base-arabertv2"`: with farasa segmentation.
+            - :obj:`"bert-large-arabertv02"`: No farasas egmentation.
+            - :obj:`"bert-large-arabertv2"`: with farasa segmentation.
+            - :obj:`"araelectra-base"`: No farasa segmentation.
+            - :obj:`"araelectra-base-discriminator"`: No farasa segmentation.
+            - :obj:`"araelectra-base-generator"`: No farasa segmentation.
+            - :obj:`"aragpt2-base"`: No farasa segmentation.
+            - :obj:`"aragpt2-medium"`: No farasa segmentation.
+            - :obj:`"aragpt2-large"`: No farasa segmentation.
+            - :obj:`"aragpt2-mega"`: No farasa segmentation.
+
+        keep_emojis(:obj: `bool`): don't remove emojis while preprocessing. Defaults to False
+
+        remove_html_markup(:obj: `bool`): Whether to remove html artfacts, should be set to False when preprocessing TyDi QA. Defaults to True
+
+        replace_urls_emails_mentions(:obj: `bool`): Whether to replace email urls and mentions by special tokens. Defaults to True
+
+        strip_tashkeel(:obj: `bool`): remove diacritics (FATHATAN, DAMMATAN, KASRATAN, FATHA, DAMMA, KASRA, SUKUN, SHADDA)
+
+        strip_tatweel(:obj: `bool`): remove tatweel '\\u0640'
+
+        insert_white_spaces(:obj: `bool`): insert whitespace before and after all non Arabic digits or English digits or Arabic and English Alphabet or the 2 brackets, then inserts whitespace between words and numbers or numbers and words
+
+        remove_elongation(:obj: `bool`): replace repetition of more than 2 non-digit character with 2 of this character
+
         """
         model_name = model_name.replace("aubmindlab/", "")
 
@@ -137,6 +160,10 @@ class ArabertPreprocessor:
 
         self.remove_html_markup = remove_html_markup
         self.replace_urls_emails_mentions = replace_urls_emails_mentions
+        self.strip_tashkeel = strip_tashkeel
+        self.strip_tatweel = strip_tatweel
+        self.insert_white_spaces = insert_white_spaces
+        self.remove_elongation = remove_elongation
 
     def preprocess(self, text):
         """
@@ -162,8 +189,10 @@ class ArabertPreprocessor:
 
         text = str(text)
         text = html.unescape(text)
-        text = araby.strip_tashkeel(text)
-        text = araby.strip_tatweel(text)
+        if self.strip_tashkeel:
+            text = araby.strip_tashkeel(text)
+        if self.strip_tatweel:
+            text = araby.strip_tatweel(text)
 
         if self.replace_urls_emails_mentions:
             # replace all possible URLs
@@ -180,18 +209,26 @@ class ArabertPreprocessor:
             text = re.sub("<br />", " ", text)
             # remove html markup
             text = re.sub("</?[^>]+>", " ", text)
-        # insert whitespace before and after all non Arabic digits or English Digits and Alphabet and the 2 brackets
-        text = re.sub(
-            "([^0-9\u0621-\u063A\u0641-\u064A\u0660-\u0669a-zA-Z\[\]])", r" \1 ", text
-        )
 
-        # insert whitespace between words and numbers or numbers and words
-        text = re.sub(
-            "(\d+)([\u0621-\u063A\u0641-\u064A\u0660-\u066C]+)", r" \1 \2 ", text
-        )
-        text = re.sub(
-            "([\u0621-\u063A\u0641-\u064A\u0660-\u066C]+)(\d+)", r" \1 \2 ", text
-        )
+        # remove repeated characters >2
+        if self.remove_elongation:
+            text = self._remove_elongation(text)
+
+        # insert whitespace before and after all non Arabic digits or English Digits and Alphabet and the 2 brackets
+        if self.insert_white_spaces:
+            text = re.sub(
+                "([^0-9\u0621-\u063A\u0641-\u064A\u0660-\u0669a-zA-Z\[\]])",
+                r" \1 ",
+                text,
+            )
+
+            # insert whitespace between words and numbers or numbers and words
+            text = re.sub(
+                "(\d+)([\u0621-\u063A\u0641-\u064A\u0660-\u066C]+)", r" \1 \2 ", text
+            )
+            text = re.sub(
+                "([\u0621-\u063A\u0641-\u064A\u0660-\u066C]+)(\d+)", r" \1 \2 ", text
+            )
 
         # remove unwanted characters
         if self.keep_emojis:
@@ -201,8 +238,6 @@ class ArabertPreprocessor:
         else:
             text = re.sub(rejected_chars_regex, " ", text)
 
-        # remove repeated characters >2
-        text = self._remove_elongation(text)
         # remove extra spaces
         text = " ".join(text.replace("\uFE0F", "").split())
 
@@ -297,7 +332,9 @@ class ArabertPreprocessor:
         AraBERTv1 preprocessing Function
         """
         text = str(text)
-        text = araby.strip_tashkeel(text)
+        if self.strip_tashkeel:
+            text = araby.strip_tashkeel(text)
+
         text = re.sub(r"\d+\/[ء-ي]+\/\d+\]", "", text)
         text = re.sub("ـ", "", text)
         text = re.sub("[«»]", ' " ', text)
@@ -317,10 +354,15 @@ class ArabertPreprocessor:
             text = re.sub(r"\[ بريد \]|\[ بريد\]|\[بريد \]", " [بريد] ", text)
             text = re.sub(r"\[ مستخدم \]|\[ مستخدم\]|\[مستخدم \]", " [مستخدم] ", text)
 
-        text = self._remove_elongation(text)
-        text = re.sub(
-            "([^0-9\u0621-\u063A\u0641-\u0669\u0671-\u0673a-zA-Z\[\]])", r" \1 ", text
-        )
+        if self.remove_elongation:
+            text = self._remove_elongation(text)
+
+        if self.insert_white_spaces:
+            text = re.sub(
+                "([^0-9\u0621-\u063A\u0641-\u0669\u0671-\u0673a-zA-Z\[\]])",
+                r" \1 ",
+                text,
+            )
         if do_farasa_tokenization:
             text = self._tokenize_arabic_words_farasa(text)
 
@@ -420,23 +462,24 @@ class ArabertPreprocessor:
             segmented_line.extend(segmented_word)
         return " ".join(segmented_line)
 
-    def _remove_elongation(self, word):
+    def _remove_elongation(self, text):
         """
-        :param word:  the input word to remove elongation
-        :return: delongated word
+        :param text:  the input text to remove elongation
+        :return: delongated text
         """
-        # loop over the number of times the regex matched the word
-        for index_ in range(len(re.findall(regex_tatweel, word))):
-            if re.search(regex_tatweel, word):
-                elongation_found = re.search(regex_tatweel, word)
-                elongation_replacement = elongation_found.group()[0]
-                elongation_pattern = elongation_found.group()
-                word = re.sub(
-                    elongation_pattern, elongation_replacement, word, flags=re.MULTILINE
+        # loop over the number of times the regex matched the text
+        for index_ in range(len(re.findall(regex_tatweel, text))):
+            elongation = re.search(regex_tatweel, text)
+            if elongation:
+                elongation_pattern = elongation.group()
+                elongation_replacement = elongation_pattern[0]
+                elongation_pattern = re.escape(elongation_pattern)
+                text = re.sub(
+                    elongation_pattern, elongation_replacement, text, flags=re.MULTILINE
                 )
             else:
                 break
-        return word
+        return text
 
     def _remove_redundant_punct(self, text):
         text_ = text
