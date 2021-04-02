@@ -13,6 +13,10 @@ If you want to clone the old repository:
 git clone https://github.com/aub-mind/arabert/
 cd arabert && git checkout 6a58ca118911ef311cbe8cdcdcc1d03601123291
 ```
+# Update
+
+- **02-Apr-2021:** AraELECTRA powered Arabic Wikipedia QA system [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/wissamantoun/arabic-wikipedia-qa-streamlit/main)
+
 # AraBERTv2
 
 ## What's New!
