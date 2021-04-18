@@ -125,13 +125,18 @@ For preprocessing data, we use the same tokenizer as [BERT](https://github.com/g
 
 ## If you used this model please cite us as:
 ```
-@misc{antoun2020araelectra,
-      title={AraELECTRA: Pre-Training Text Discriminators for Arabic Language Understanding},
-      author={Wissam Antoun and Fady Baly and Hazem Hajj},
-      year={2020},
-      eprint={2012.15516},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@inproceedings{antoun-etal-2021-araelectra,
+    title = "{A}ra{ELECTRA}: Pre-Training Text Discriminators for {A}rabic Language Understanding",
+    author = "Antoun, Wissam  and
+      Baly, Fady  and
+      Hajj, Hazem",
+    booktitle = "Proceedings of the Sixth Arabic Natural Language Processing Workshop",
+    month = apr,
+    year = "2021",
+    address = "Kyiv, Ukraine (Virtual)",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/2021.wanlp-1.20",
+    pages = "191--195",
 }
 ```
 

@@ -150,7 +150,6 @@ bert-base-arabertv02
 bert-base-arabertv2
 bert-large-arabertv02
 bert-large-arabertv2
-araelectra-base
 araelectra-base-discriminator
 araelectra-base-generator
 aragpt2-base
@@ -183,25 +182,35 @@ Google Scholar has our Bibtex wrong (missing name), use this instead
 ```
 ## AraGPT2
 ```
-@misc{antoun2020aragpt2,
-      title={AraGPT2: Pre-Trained Transformer for Arabic Language Generation},
-      author={Wissam Antoun and Fady Baly and Hazem Hajj},
-      year={2020},
-      eprint={2012.15520},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@inproceedings{antoun-etal-2021-aragpt2,
+    title = "{A}ra{GPT}2: Pre-Trained Transformer for {A}rabic Language Generation",
+    author = "Antoun, Wissam  and
+      Baly, Fady  and
+      Hajj, Hazem",
+    booktitle = "Proceedings of the Sixth Arabic Natural Language Processing Workshop",
+    month = apr,
+    year = "2021",
+    address = "Kyiv, Ukraine (Virtual)",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/2021.wanlp-1.21",
+    pages = "196--207",
 }
 ```
 
 ## AraELECTRA
 ```
-@misc{antoun2020araelectra,
-      title={AraELECTRA: Pre-Training Text Discriminators for Arabic Language Understanding},
-      author={Wissam Antoun and Fady Baly and Hazem Hajj},
-      year={2020},
-      eprint={2012.15516},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@inproceedings{antoun-etal-2021-araelectra,
+    title = "{A}ra{ELECTRA}: Pre-Training Text Discriminators for {A}rabic Language Understanding",
+    author = "Antoun, Wissam  and
+      Baly, Fady  and
+      Hajj, Hazem",
+    booktitle = "Proceedings of the Sixth Arabic Natural Language Processing Workshop",
+    month = apr,
+    year = "2021",
+    address = "Kyiv, Ukraine (Virtual)",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/2021.wanlp-1.20",
+    pages = "191--195",
 }
 ```
 

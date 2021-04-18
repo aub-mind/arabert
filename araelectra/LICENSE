@@ -56,6 +56,19 @@ times remain with the Owners and LICENSEE agrees to preserve same.
 
 The use of AraELECTRA should be cited as follows:
 
+@inproceedings{antoun-etal-2021-araelectra,
+    title = "{A}ra{ELECTRA}: Pre-Training Text Discriminators for {A}rabic Language Understanding",
+    author = "Antoun, Wissam  and
+      Baly, Fady  and
+      Hajj, Hazem",
+    booktitle = "Proceedings of the Sixth Arabic Natural Language Processing Workshop",
+    month = apr,
+    year = "2021",
+    address = "Kyiv, Ukraine (Virtual)",
+    publisher = "Association for Computational Linguistics",
+    url = "https://www.aclweb.org/anthology/2021.wanlp-1.20",
+    pages = "191--195",
+}
 
 [AraELECTRA] Copyright 2020 by [American University of Beirut].
 All rights reserved.
