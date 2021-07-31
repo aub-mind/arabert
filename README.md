@@ -82,7 +82,7 @@ For Dataset Source see the [Dataset Section](#Dataset)
 Model | Hardware | num of examples (seq len = 1024) | Batch Size | Num of Steps | Time (in days)
  ---|:---:|:---:|:---:|:---:|:---:
 AraGPT2-base | TPUv3-128 | 9.7M | 1792 | 125K | 1.5
-AraGPT2-medium | TPUv3-128 | 9.7M | 1152 | 85K | 1.5
+AraGPT2-medium | TPUv3-8 | 9.7M | 80 | 1M | 15
 AraGPT2-large | TPUv3-128 | 9.7M | 256 | 220k | 3
 AraGPT2-mega | TPUv3-128 | 9.7M | 256 | 800K | 9
 
@@ -104,7 +104,7 @@ ELECTRA-base | TPUv3-8 | - | 256 | 2M | 24
 
 # Dataset
 
-The pretraining data used for the new AraBERT model is also used for **AraGPT2 and AraELECTRA**.
+The pretraining data used for the new **AraBERT** model is also used for **AraGPT2 and AraELECTRA**.
 
 The dataset consists of 77GB or 200,095,961 lines or 8,655,948,860 words or 82,232,988,358 chars (before applying Farasa Segmentation)
 
@@ -119,6 +119,7 @@ For the new dataset we added the unshuffled OSCAR corpus, after we thoroughly fi
 
 It is recommended to apply our preprocessing function before training/testing on any dataset.
 **Install farasapy to segment text for AraBERT v1 & v2 `pip install farasapy`**
+
 
 ```python
 from arabert.preprocess import ArabertPreprocessor
@@ -138,25 +139,51 @@ arabert_prep.unpreprocess(output_text)
 >>>"ولن نبالغ إذا قلنا: إن 'هاتف' أو 'كمبيوتر المكتب' في زمننا هذا ضروري"
 ```
 
-### Accepted Model Names:
-The `ArabertPreprocessor` class expects one of the following model names:
+### The `ArabertPreprocessor` class:
 
-Note: You can also use the same model name from the `HuggingFace` model repository without removing `aubmindlab/`. Defaults to `bert-base-arabertv02` with no pre-segmentation
+```python
+ArabertPreprocessor(
+  model_name= "",
+  keep_emojis = False,
+  remove_html_markup = True,
+  replace_urls_emails_mentions = True,
+  strip_tashkeel = True,
+  strip_tatweel = True,
+  insert_white_spaces = True,
+  remove_non_digit_repetition = True,
+  replace_slash_with_dash = None,
+  map_hindi_numbers_to_arabic = None,
+  apply_farasa_segmentation = None
+)
+```
 
-```
-bert-base-arabertv01
-bert-base-arabert
-bert-base-arabertv02
-bert-base-arabertv2
-bert-large-arabertv02
-bert-large-arabertv2
-araelectra-base-discriminator
-araelectra-base-generator
-aragpt2-base
-aragpt2-medium
-aragpt2-large
-aragpt2-mega
-```
+- **model_name** (`str`): model name from the HuggingFace Models page without the aubmindlab tag. Will default to a base Arabic preprocessor if model name was not found.
+
+- **keep_emojis**(`bool`, `optional`, defaults to `False`): don't remove emojis while preprocessing.
+
+- **remove_html_markup**( `bool`, `optional`, defaults to `True`): Whether to remove html artfacts,
+  should be set to False when preprocessing TyDi QA.
+
+- **replace_urls_emails_mentions**(`bool`, `optional`, defaults to `True`): Whether to replace email urls
+  and mentions by special tokens.
+
+- **strip_tashkeel**(`bool`, `optional`, defaults to `True`): remove diacritics (FATHATAN, DAMMATAN, KASRATAN, FATHA, DAMMA,  KASRA, SUKUN, SHADDA).
+
+- **strip_tatweel**(`bool`, `optional`, defaults to `True`): remove tatweel '\\u0640'.
+
+- **insert_white_spaces**(`bool`, `optional`, defaults to `True`): insert whitespace before and after all non Arabic digits or English digits or Arabic and English Alphabet or the 2 brackets, then inserts whitespace between words and numbers or numbers and words.
+
+- **remove_non_digit_repetition**(`bool`, `optional`, defaults to `True`): replace repetition of more than 2 non-digit character with 2 of this character.
+
+- **replace_slash_with_dash**(`bool`, `optional`, defaults to `None`): Will be automatically set to True in AraBERTv02,  AraELECTRA and AraGPT2.
+  - Set to False to force disable, and True to force enable. Replaces the "/"  with "-", since "/" is missing from AraBERTv2, AraELECTRA and ARAGPT2 vocabulary.
+
+- **map_hindi_numbers_to_arabic**(`bool`, `optional`, defaults to `None`): Will be automatically set to True in AraBERTv02, AraELECTRA and AraGPT2.Set to False to force disable, and True to force enable.
+  - Replaces hindi numbers with the corresponding Arabic one. ex: "١٩٩٥" --> "1995". This is behavior is present by default in AraBERTv1 and v2 (with pre-segmentation), and fixes the issue of caused by a bug when inserting white spaces.
+
+- **apply_farasa_segmentation**(`bool`, `optional`, defaults to `None`): Will be automatically set to True in
+  AraBERTv2, and AraBERTv1. Set to False to force disable, and True to force enable.
+
 # Examples Notebooks
 
 - You can find the old examples that work with AraBERTv1 in the `examples/old` folder

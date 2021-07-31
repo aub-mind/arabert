@@ -133,77 +133,7 @@ class ArabertPreprocessor:
         map_hindi_numbers_to_arabic: bool = None,
         apply_farasa_segmentation: bool = None,
     ):
-        """
-        A Preprocessor class that cleans and preprocesses text for all models in the AraBERT repo.
-        It also can unprocess the text ouput of the generated text
 
-        Args:
-
-            model_name (:obj:`str`): model name from the HuggingFace Models page without
-        the aubmindlab tag. Will default to a base Arabic preprocessor if model name was not found.
-        Current accepted models are:
-
-            - :obj:`"bert-base-arabertv01"`: No farasa segmentation.
-            - :obj:`"bert-base-arabert"`: with farasa segmentation.
-            - :obj:`"bert-base-arabertv02"`: No farasas egmentation.
-            - :obj:`"bert-base-arabertv2"`: with farasa segmentation.
-            - :obj:`"bert-large-arabertv02"`: No farasas egmentation.
-            - :obj:`"bert-large-arabertv2"`: with farasa segmentation.
-            - :obj:`"araelectra-base"`: No farasa segmentation.
-            - :obj:`"araelectra-base-discriminator"`: No farasa segmentation.
-            - :obj:`"araelectra-base-generator"`: No farasa segmentation.
-            - :obj:`"aragpt2-base"`: No farasa segmentation.
-            - :obj:`"aragpt2-medium"`: No farasa segmentation.
-            - :obj:`"aragpt2-large"`: No farasa segmentation.
-            - :obj:`"aragpt2-mega"`: No farasa segmentation.
-
-            keep_emojis(:obj:`bool`, `optional`, defaults to :obj:`False`): don't remove emojis while preprocessing.
-
-            remove_html_markup(:obj: `bool`, `optional`, defaults to :obj:`True`): Whether to remove html artfacts,
-            should be set to False when preprocessing TyDi QA.
-
-            replace_urls_emails_mentions(:obj:`bool`, `optional`, defaults to :obj:`True`): Whether to replace email urls
-            and mentions by special tokens.
-
-            strip_tashkeel(:obj:`bool`, `optional`, defaults to :obj:`True`): remove diacritics (FATHATAN, DAMMATAN, KASRATAN, FATHA, DAMMA,
-            KASRA, SUKUN, SHADDA).
-
-            strip_tatweel(:obj:`bool`, `optional`, defaults to :obj:`True`): remove tatweel '\\u0640'.
-
-            insert_white_spaces(:obj:`bool`, `optional`, defaults to :obj:`True`): insert whitespace before and after all non Arabic digits
-            or English digits or Arabic and English Alphabet or the 2 brackets, then inserts whitespace
-            between words and numbers or numbers and words.
-
-            remove_non_digit_repetition(:obj:`bool`, `optional`, defaults to :obj:`True`): replace repetition of more than 2 non-digit character with
-            2 of this character.
-
-            replace_slash_with_dash(:obj:`bool`, `optional`, defaults to :obj:`None`): Will be automatically set to True in AraBERTv02,
-            AraELECTRA and AraGPT2.
-            Set to False to force disable, and True to force enable. Replaces the "/"  with "-",
-            since "/" is missing from AraBERTv2, AraELECTRA and ARAGPT2 vocabulary.
-
-            map_hindi_numbers_to_arabic(:obj:`bool`, `optional`, defaults to :obj:`None`): Will be automatically set to True in
-            AraBERTv02, AraELECTRA and AraGPT2.Set to False to force disable, and True to force enable.
-            Replaces hindi numbers with the corresponding Arabic one. ex: "١٩٩٥" --> "1995".
-            This is behavior is present by default in AraBERTv1 and v2 (with pre-segmentation),
-            and fixes the issue of caused by a bug when inserting white spaces.
-
-            apply_farasa_segmentation(:obj:`bool`, `optional`, defaults to :obj:`None`): Will be automatically set to True in
-            AraBERTv2, and AraBERTv1. Set to False to force disable, and True to force enable.
-
-        Returns:
-
-            ArabertPreprocessor: A preprocessor instance
-
-        Example:
-
-            from preprocess import ArabertPreprocessor
-
-            arabert_prep = ArabertPreprocessor("aubmindlab/bert-base-arabertv2")
-
-            arabert_prep.preprocess("SOME ARABIC TEXT")
-
-        """
         model_name = model_name.replace("aubmindlab/", "").replace("wissamantoun/", "")
 
         if model_name not in ACCEPTED_MODELS:
