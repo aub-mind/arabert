@@ -1,6 +1,10 @@
 # AraBERTv2 / AraGPT2 / AraELECTRA
 
-<img src="https://github.com/aub-mind/arabert/blob/master/arabert_logo.png" width="100" align="right"/>
+<p align="middle">
+  <img src="https://github.com/aub-mind/arabert/blob/master/arabert_logo.png" width="150" align="left"/>
+  <img src="https://github.com/aub-mind/arabert/blob/master/AraGPT2.png" width="150"/>
+  <img src="https://github.com/aub-mind/arabert/blob/master/AraELECTRA.png" width="150" align="right"/>
+</p>
 
 This repository now contains code and implementation for:
 - **AraBERT v0.1/v1**: Original
