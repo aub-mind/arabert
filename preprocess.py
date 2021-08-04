@@ -150,7 +150,7 @@ class ArabertPreprocessor:
             else:
                 self.apply_farasa_segmentation = False
         else:
-            if apply_farasa_segmentation == False and self.apply_farasa_segmentation:
+            if apply_farasa_segmentation == False and self.model_name in SEGMENTED_MODELS:
                 logging.warning(
                     "The selected model_name requires Farasa pre-segmentation, but apply_farasa_segmentation was set to False!"
                 )
