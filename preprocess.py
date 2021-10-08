@@ -10,8 +10,10 @@ ACCEPTED_MODELS = [
     "bert-base-arabert",
     "bert-base-arabertv02",
     "bert-base-arabertv2",
+    "bert-base-arabertv02-twitter",
     "bert-large-arabertv02",
     "bert-large-arabertv2",
+    "bert-large-arabertv02-twitter"
     "araelectra-base",
     "araelectra-base-discriminator",
     "araelectra-base-generator",
@@ -31,8 +33,10 @@ SEGMENTED_MODELS = [
 SECOND_GEN_MODELS = [
     "bert-base-arabertv02",
     "bert-base-arabertv2",
+    "bert-base-arabertv02-twitter",
     "bert-large-arabertv02",
     "bert-large-arabertv2",
+    "bert-large-arabertv02-twitter",
     "araelectra-base",
     "araelectra-base-discriminator",
     "araelectra-base-generator",
@@ -43,6 +47,10 @@ SECOND_GEN_MODELS = [
     "aragpt2-mega",
 ]
 
+TWEET_MODELS = [
+    "bert-base-arabertv02-twitter",
+    "bert-large-arabertv02-twitter",
+]
 
 class ArabertPreprocessor:
     """
@@ -55,22 +63,23 @@ class ArabertPreprocessor:
         the aubmindlab tag. Will default to a base Arabic preprocessor if model name was not found.
         Current accepted models are:
 
-            - "bert-base-arabertv01": No farasa segmentation.
-            - "bert-base-arabert": with farasa segmentation.
-            - "bert-base-arabertv02": No farasas egmentation.
-            - "bert-base-arabertv2": with farasa segmentation.
-            - "bert-large-arabertv02": No farasas egmentation.
-            - "bert-large-arabertv2": with farasa segmentation.
-            - "araelectra-base": No farasa segmentation.
-            - "araelectra-base-discriminator": No farasa segmentation.
-            - "araelectra-base-generator": No farasa segmentation.
-            - "aragpt2-base": No farasa segmentation.
-            - "aragpt2-medium": No farasa segmentation.
-            - "aragpt2-large": No farasa segmentation.
-            - "aragpt2-mega": No farasa segmentation.
+            - "bert-base-arabertv01"
+            - "bert-base-arabert"
+            - "bert-base-arabertv02"
+            - "bert-base-arabertv2"
+            - "bert-base-arabertv02-twitter"
+            - "bert-large-arabertv02"
+            - "bert-large-arabertv2"
+            - "bert-large-arabertv02-twitter"
+            - "araelectra-base"
+            - "araelectra-base-discriminator"
+            - "araelectra-base-generator"
+            - "araelectra-base-artydiqa"
+            - "aragpt2-base"
+            - "aragpt2-medium"
+            - "aragpt2-large"
+            - "aragpt2-mega"
 
-
-        keep_emojis(:obj:`bool`, `optional`, defaults to :obj:`False`): don't remove emojis while preprocessing.
 
         remove_html_markup(:obj: `bool`, `optional`, defaults to :obj:`True`): Whether to remove html artfacts,
         should be set to False when preprocessing TyDi QA.
@@ -104,6 +113,9 @@ class ArabertPreprocessor:
         apply_farasa_segmentation(:obj:`bool`, `optional`, defaults to :obj:`None`): Will be automatically set to True in
         AraBERTv2, and AraBERTv1. Set to False to force disable, and True to force enable.
 
+        keep_emojis(:obj:`bool`, `optional`, defaults to :obj:`None`): don't remove emojis while preprocessing.
+        Will be automatically set to True in AraBERT trained on tweets.
+
 
 
     Returns:
@@ -122,13 +134,13 @@ class ArabertPreprocessor:
     def __init__(
         self,
         model_name: str,
-        keep_emojis: bool = False,
         remove_html_markup: bool = True,
         replace_urls_emails_mentions: bool = True,
         strip_tashkeel: bool = True,
         strip_tatweel: bool = True,
         insert_white_spaces: bool = True,
         remove_non_digit_repetition: bool = True,
+        keep_emojis: bool = None,
         replace_slash_with_dash: bool = None,
         map_hindi_numbers_to_arabic: bool = None,
         apply_farasa_segmentation: bool = None,
@@ -167,7 +179,18 @@ class ArabertPreprocessor:
                     "farasapy is not installed, you want be able to process text for AraBERTv1 and v2. Install it using: pip install farasapy"
                 )
 
-        self.keep_emojis = keep_emojis
+        if keep_emojis is None:
+            if self.model_name in TWEET_MODELS:
+                self.keep_emojis = True
+            else:
+                self.keep_emojis = False
+        else:
+            if keep_emojis == False and self.model_name in TWEET_MODELS:
+                logging.warning(
+                    "The selected model_name is trained on emojis, but keep_emojis was set to False!"
+                )
+            self.keep_emojis = keep_emojis
+
         if self.keep_emojis:
             import emoji
 

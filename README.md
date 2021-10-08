@@ -19,13 +19,22 @@ cd arabert && git checkout 6a58ca118911ef311cbe8cdcdcc1d03601123291
 ```
 # Update
 
+- **8-Oct-2021**: New AraBERT models that better supports tweets and emojies.
+- **13-Sep-2021:** Arabic NLP Demo Space on HuggingFace [![Open Space](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://huggingface.co/spaces/aubmindlab/Arabic-NLP)
 - **02-Apr-2021:** AraELECTRA powered Arabic Wikipedia QA system [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/wissamantoun/arabic-wikipedia-qa-streamlit/main)
 
 # AraBERTv2
 
 ## What's New!
 
-AraBERT now comes in 4 new variants to replace the old v1 versions:
+`AraBERTv0.2-Twitter-base/large` are two new models for Arabic dialects and tweets, trained by continuing the pre-training using the MLM task on ~60M Arabic tweets (filtered from a collection on 100M).
+
+The two new models have had emojies added to their vocabulary in addition to common words that weren't at first present.
+The pre-training was done with a max sentence length of 64 only for 1 epoch.
+
+## Models
+
+AraBERT comes in 6 variants:
 
 More Detail in the AraBERT folder and in the [README](https://github.com/aub-mind/arabert/tree/master/arabert) and in the [AraBERT Paper](https://arxiv.org/abs/2003.00104)
 
@@ -37,6 +46,8 @@ AraBERTv2-base| [bert-base-arabertv2](https://huggingface.co/aubmindlab/bert-bas
 AraBERTv2-large| [bert-large-arabertv2](https://huggingface.co/aubmindlab/bert-large-arabertv2) | 1.38G / 371M | Yes | 200M / 77GB / 8.6B |
  AraBERTv0.1-base| [bert-base-arabertv01](https://huggingface.co/aubmindlab/bert-base-arabertv01) | 543MB / 136M | No | 77M / 23GB / 2.7B |
 AraBERTv1-base| [bert-base-arabert](https://huggingface.co/aubmindlab/bert-base-arabert) | 543MB / 136M | Yes | 77M / 23GB / 2.7B |
+AraBERTv0.2-Twitter-base| [bert-base-arabertv02-twitter](https://huggingface.co/aubmindlab/bert-base-arabertv02-twitter) | 543MB / 136M | No | Same as v02 + 60M Multi-Dialect Tweets|
+ AraBERTv0.2-Twitter-large| [bert-large-arabertv02-twitter](https://huggingface.co/aubmindlab/bert-large-arabertv02-twitter) | 1.38G / 371M | No | Same as v02 + 60M Multi-Dialect Tweets|
 
 All models are available in the `HuggingFace` model page under the [aubmindlab](https://huggingface.co/aubmindlab/) name. Checkpoints are available in PyTorch, TF2 and TF1 formats.
 
