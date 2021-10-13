@@ -13,7 +13,7 @@ ACCEPTED_MODELS = [
     "bert-base-arabertv02-twitter",
     "bert-large-arabertv02",
     "bert-large-arabertv2",
-    "bert-large-arabertv02-twitter"
+    "bert-large-arabertv02-twitter",
     "araelectra-base",
     "araelectra-base-discriminator",
     "araelectra-base-generator",
