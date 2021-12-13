@@ -1,5 +1,7 @@
 # AraBERTv2 / AraGPT2 / AraELECTRA
 
+![visitors](https://visitor-badge.glitch.me/badge?page_id=wissamantoun.arabert)
+
 <p align="middle">
   <img src="https://github.com/aub-mind/arabert/blob/master/arabert_logo.png" width="150" align="left"/>
   <img src="https://github.com/aub-mind/arabert/blob/master/AraGPT2.png" width="150"/>
