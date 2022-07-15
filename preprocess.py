@@ -52,6 +52,118 @@ TWEET_MODELS = [
     "bert-large-arabertv02-twitter",
 ]
 
+PREFIX_LIST = [
+    "ال",
+    "و",
+    "ف",
+    "ب",
+    "ك",
+    "ل",
+    "لل",
+    "\u0627\u0644",
+    "\u0648",
+    "\u0641",
+    "\u0628",
+    "\u0643",
+    "\u0644",
+    "\u0644\u0644",
+    "س",
+]
+SUFFIX_LIST = [
+    "ه",
+    "ها",
+    "ك",
+    "ي",
+    "هما",
+    "كما",
+    "نا",
+    "كم",
+    "هم",
+    "هن",
+    "كن",
+    "ا",
+    "ان",
+    "ين",
+    "ون",
+    "وا",
+    "ات",
+    "ت",
+    "ن",
+    "ة",
+    "\u0647",
+    "\u0647\u0627",
+    "\u0643",
+    "\u064a",
+    "\u0647\u0645\u0627",
+    "\u0643\u0645\u0627",
+    "\u0646\u0627",
+    "\u0643\u0645",
+    "\u0647\u0645",
+    "\u0647\u0646",
+    "\u0643\u0646",
+    "\u0627",
+    "\u0627\u0646",
+    "\u064a\u0646",
+    "\u0648\u0646",
+    "\u0648\u0627",
+    "\u0627\u062a",
+    "\u062a",
+    "\u0646",
+    "\u0629",
+]
+
+
+# the never_split list is ussed with the transformers library
+_PREFIX_SYMBOLS = [x + "+" for x in PREFIX_LIST]
+_SUFFIX_SYMBOLS = ["+" + x for x in SUFFIX_LIST]
+_OTHER_TOKENS = ["[رابط]", "[مستخدم]", "[بريد]"]
+NEVER_SPLIT_TOKENS = list(set(_PREFIX_SYMBOLS + _SUFFIX_SYMBOLS + _OTHER_TOKENS))
+
+URL_REGEXES = [
+    r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)",
+    r"@(https?|ftp)://(-\.)?([^\s/?\.#-]+\.?)+(/[^\s]*)?$@iS",
+    r"http[s]?://[a-zA-Z0-9_\-./~\?=%&]+",
+    r"www[a-zA-Z0-9_\-?=%&/.~]+",
+    r"[a-zA-Z]+\.com",
+    r"(?=http)[^\s]+",
+    r"(?=www)[^\s]+",
+    r"://",
+]
+USER_MENTION_REGEX = r"@[\w\d]+"
+EMAIL_REGEXES = [r"[\w-]+@([\w-]+\.)+[\w-]+", r"\S+@\S+"]
+REDUNDANT_PUNCT_PATTERN = (
+    r"([!\"#\$%\'\(\)\*\+,\.:;\-<=·>?@\[\\\]\^_ـ`{\|}~—٪’،؟`୍“؛”ۚ【»؛\s+«–…‘]{2,})"
+)
+
+REGEX_TATWEEL = r"(\D)\1{2,}"
+MULTIPLE_CHAR_PATTERN = re.compile(r"(\D)\1{2,}", re.DOTALL)
+
+REJECTED_CHARS_REGEX = r"[^0-9\u0621-\u063A\u0640-\u066C\u0671-\u0674a-zA-Z\[\]!\"#\$%\'\(\)\*\+,\.:;\-<=·>?@\[\\\]\^_ـ`{\|}~—٪’،؟`୍“؛”ۚ»؛\s+«–…‘]"
+REJECTED_CHARS_REGEXV2 = r"[^0-9\u0621-\u063A\u0641-\u066C\u0671-\u0674a-zA-Z\[\]!\"#\$%\'\(\)\*\+,\.:;\-<=·>?@\[\\\]\^_ـ`{\|}~—٪’،؟`୍“؛”ۚ»؛\s+«–…‘/]"
+
+REGEX_URL_STEP1 = r"(?=http)[^\s]+"
+REGEX_URL_STEP2 = r"(?=www)[^\s]+"
+REGEX_URL = r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)"
+REGEX_MENTION = r"@[\w\d]+"
+REGEX_EMAIL = r"\S+@\S+"
+
+CHARS_REGEX = r"0-9\u0621-\u063A\u0640-\u066C\u0671-\u0674a-zA-Z\[\]!\"#\$%\'\(\)\*\+,\.:;\-<=·>?@\[\\\]\^_ـ`{\|}~—٪’،؟`୍“؛”ۚ»؛\s+«–…‘"
+CHARS_REGEXV2 = r"0-9\u0621-\u063A\u0640-\u066C\u0671-\u0674a-zA-Z\[\]!\"#\$%\'\(\)\*\+,\.:;\-<=·>?@\[\\\]\^_ـ`{\|}~—٪’،؟`୍“؛”ۚ»؛\s+«–…‘/"
+
+WHITE_SPACED_DOUBLE_QUOTATION_REGEX = r'\"\s+([^"]+)\s+\"'
+WHITE_SPACED_SINGLE_QUOTATION_REGEX = r"\'\s+([^']+)\s+\'"
+WHITE_SPACED_BACK_QUOTATION_REGEX = r"\`\s+([^`]+)\s+\`"
+WHITE_SPACED_EM_DASH = r"\—\s+([^—]+)\s+\—"
+
+LEFT_SPACED_CHARS = r" ([\]!#\$%\),\.:;\?}٪’،؟”؛…»·])"
+RIGHT_SPACED_CHARS = r"([\[\(\{“«‘*\~]) "
+LEFT_AND_RIGHT_SPACED_CHARS = r" ([\+\-\<\=\>\@\\\^\_\|\–]) "
+
+_HINDI_NUMS = "٠١٢٣٤٥٦٧٨٩"
+_ARABIC_NUMS = "0123456789"
+HINDI_TO_ARABIC_MAP = str.maketrans(_HINDI_NUMS, _ARABIC_NUMS)
+
+
 class ArabertPreprocessor:
     """
     A Preprocessor class that cleans and preprocesses text for all models in the AraBERT repo.
@@ -162,7 +274,10 @@ class ArabertPreprocessor:
             else:
                 self.apply_farasa_segmentation = False
         else:
-            if apply_farasa_segmentation == False and self.model_name in SEGMENTED_MODELS:
+            if (
+                apply_farasa_segmentation == False
+                and self.model_name in SEGMENTED_MODELS
+            ):
                 logging.warning(
                     "The selected model_name requires Farasa pre-segmentation, but apply_farasa_segmentation was set to False!"
                 )
@@ -199,6 +314,17 @@ class ArabertPreprocessor:
                 logging.warning(
                     "Keeping tweets with Farasa Segmentation is 10 times slower"
                 )
+            emoji_regex = "".join(list(self.emoji.UNICODE_EMOJI["en"].keys()))
+            self.REJECTED_CHARS_REGEX = "[^%s%s]" % (
+                CHARS_REGEX if self.model_name in SECOND_GEN_MODELS else CHARS_REGEXV2,
+                emoji_regex,
+            )
+        else:
+            self.REJECTED_CHARS_REGEX = (
+                REJECTED_CHARS_REGEX
+                if self.model_name in SECOND_GEN_MODELS
+                else REJECTED_CHARS_REGEXV2
+            )
 
         self.remove_html_markup = remove_html_markup
         self.replace_urls_emails_mentions = replace_urls_emails_mentions
@@ -267,10 +393,10 @@ class ArabertPreprocessor:
 
         # removes the spaces around quotation marks ex: i " ate " an apple --> i "ate" an apple
         # https://stackoverflow.com/a/53436792/5381220
-        text = re.sub(white_spaced_double_quotation_regex, '"' + r"\1" + '"', text)
-        text = re.sub(white_spaced_single_quotation_regex, "'" + r"\1" + "'", text)
-        text = re.sub(white_spaced_back_quotation_regex, "\`" + r"\1" + "\`", text)
-        text = re.sub(white_spaced_back_quotation_regex, "\—" + r"\1" + "\—", text)
+        text = re.sub(WHITE_SPACED_DOUBLE_QUOTATION_REGEX, '"' + r"\1" + '"', text)
+        text = re.sub(WHITE_SPACED_SINGLE_QUOTATION_REGEX, "'" + r"\1" + "'", text)
+        text = re.sub(WHITE_SPACED_BACK_QUOTATION_REGEX, "\`" + r"\1" + "\`", text)
+        text = re.sub(WHITE_SPACED_EM_DASH, "\—" + r"\1" + "\—", text)
 
         # during generation, sometimes the models don't put a space after the dot, this handles it
         text = text.replace(".", " . ")
@@ -280,9 +406,9 @@ class ArabertPreprocessor:
         text = re.sub(r"(\d+) \. (\d+)", r"\1.\2", text)
         text = re.sub(r"(\d+) \, (\d+)", r"\1,\2", text)
 
-        text = re.sub(left_and_right_spaced_chars, r"\1", text)
-        text = re.sub(left_spaced_chars, r"\1", text)
-        text = re.sub(right_spaced_chars, r"\1", text)
+        text = re.sub(LEFT_AND_RIGHT_SPACED_CHARS, r"\1", text)
+        text = re.sub(LEFT_SPACED_CHARS, r"\1", text)
+        text = re.sub(RIGHT_SPACED_CHARS, r"\1", text)
 
         return text
 
@@ -327,13 +453,13 @@ class ArabertPreprocessor:
 
         if self.replace_urls_emails_mentions:
             # replace all possible URLs
-            for reg in url_regexes:
+            for reg in URL_REGEXES:
                 text = re.sub(reg, " [رابط] ", text)
             # REplace Emails with [بريد]
-            for reg in email_regexes:
+            for reg in EMAIL_REGEXES:
                 text = re.sub(reg, " [بريد] ", text)
             # replace mentions with [مستخدم]
-            text = re.sub(user_mention_regex, " [مستخدم] ", text)
+            text = re.sub(USER_MENTION_REGEX, " [مستخدم] ", text)
 
         if self.remove_html_markup:
             # remove html line breaks
@@ -342,7 +468,7 @@ class ArabertPreprocessor:
             text = re.sub("</?[^>]+>", " ", text)
 
         if self.map_hindi_numbers_to_arabic:
-            text = text.translate(hindi_to_arabic_map)
+            text = text.translate(HINDI_TO_ARABIC_MAP)
 
         # remove repeated characters >2
         if self.remove_non_digit_repetition:
@@ -374,12 +500,7 @@ class ArabertPreprocessor:
             )
 
         # remove unwanted characters
-        if self.keep_emojis:
-            emoji_regex = "".join(list(self.emoji.UNICODE_EMOJI["en"].keys()))
-            rejected_chars_regex2 = "[^%s%s]" % (chars_regexv2, emoji_regex)
-            text = re.sub(rejected_chars_regex2, " ", text)
-        else:
-            text = re.sub(rejected_chars_regexv2, " ", text)
+        text = re.sub(self.REJECTED_CHARS_REGEX, " ", text)
 
         # remove extra spaces
         text = " ".join(text.replace("\uFE0F", "").split())
@@ -410,13 +531,13 @@ class ArabertPreprocessor:
 
         if self.replace_urls_emails_mentions:
             # replace all possible URLs
-            for reg in url_regexes:
+            for reg in URL_REGEXES:
                 text = re.sub(reg, " [رابط] ", text)
             # REplace Emails with [بريد]
-            for reg in email_regexes:
+            for reg in EMAIL_REGEXES:
                 text = re.sub(reg, " [بريد] ", text)
             # replace mentions with [مستخدم]
-            text = re.sub(user_mention_regex, " [مستخدم] ", text)
+            text = re.sub(USER_MENTION_REGEX, " [مستخدم] ", text)
 
         if self.remove_html_markup:
             # remove html line breaks
@@ -425,7 +546,7 @@ class ArabertPreprocessor:
             text = re.sub("</?[^>]+>", " ", text)
 
         if self.map_hindi_numbers_to_arabic:
-            text = text.translate(hindi_to_arabic_map)
+            text = text.translate(HINDI_TO_ARABIC_MAP)
 
         # remove repeated characters >2
         if self.remove_non_digit_repetition:
@@ -451,12 +572,7 @@ class ArabertPreprocessor:
             text = text.replace("/", "-")
 
         # remove unwanted characters
-        if self.keep_emojis:
-            emoji_regex = "".join(list(self.emoji.UNICODE_EMOJI["en"].keys()))
-            rejected_chars_regex2 = "[^%s%s]" % (chars_regex, emoji_regex)
-            text = re.sub(rejected_chars_regex2, " ", text)
-        else:
-            text = re.sub(rejected_chars_regex, " ", text)
+        text = re.sub(self.REJECTED_CHARS_REGEX, " ", text)
 
         # remove extra spaces
         text = " ".join(text.replace("\uFE0F", "").split())
@@ -494,11 +610,11 @@ class ArabertPreprocessor:
 
         if self.replace_urls_emails_mentions:
             # replace the [رابط] token with space if you want to clean links
-            text = re.sub(regex_url_step1, "[رابط]", text)
-            text = re.sub(regex_url_step2, "[رابط]", text)
-            text = re.sub(regex_url, "[رابط]", text)
-            text = re.sub(regex_email, "[بريد]", text)
-            text = re.sub(regex_mention, "[مستخدم]", text)
+            text = re.sub(REGEX_URL_STEP1, "[رابط]", text)
+            text = re.sub(REGEX_URL_STEP2, "[رابط]", text)
+            text = re.sub(REGEX_URL, "[رابط]", text)
+            text = re.sub(REGEX_EMAIL, "[بريد]", text)
+            text = re.sub(REGEX_MENTION, "[مستخدم]", text)
         text = re.sub("…", r"\.", text).strip()
         text = self._remove_redundant_punct(text)
 
@@ -565,10 +681,10 @@ class ArabertPreprocessor:
                             segmented_word.append("+" + temp_token)
                             temp_token = ""
                     # if Kaf is at the end, this is handled with the statement after the loop
-                elif temp_token in prefix_list:
+                elif temp_token in PREFIX_LIST:
                     segmented_word.append(temp_token + "+")
                     temp_token = ""
-                elif temp_token in suffix_list:
+                elif temp_token in SUFFIX_LIST:
                     segmented_word.append("+" + temp_token)
                     temp_token = ""
                 else:
@@ -577,7 +693,7 @@ class ArabertPreprocessor:
                 continue
             temp_token += c
         if temp_token != "":
-            if temp_token in suffix_list:
+            if temp_token in SUFFIX_LIST:
                 segmented_word.append("+" + temp_token)
             else:
                 segmented_word.append(temp_token)
@@ -608,9 +724,9 @@ class ArabertPreprocessor:
                 continue
             segmented_word = []
             for token in word.split("+"):
-                if token in prefix_list:
+                if token in PREFIX_LIST:
                     segmented_word.append(token + "+")
-                elif token in suffix_list:
+                elif token in SUFFIX_LIST:
                     segmented_word.append("+" + token)
                 else:
                     segmented_word.append(token)
@@ -624,8 +740,8 @@ class ArabertPreprocessor:
         """
         # loop over the number of times the regex matched the text
         # OLD
-        # for index_ in range(len(re.findall(regex_tatweel, text))):
-        #     elongation = re.search(regex_tatweel, text)
+        # for index_ in range(len(re.findall(REGEX_TATWEEL, text))):
+        #     elongation = re.search(REGEX_TATWEEL, text)
         #     if elongation:
         #         elongation_pattern = elongation.group()
         #         elongation_replacement = elongation_pattern[0]
@@ -637,12 +753,12 @@ class ArabertPreprocessor:
         #         break
 
         # New
-        text = multiple_char_pattern.sub(r"\1\1", text)
+        text = MULTIPLE_CHAR_PATTERN.sub(r"\1\1", text)
         return text
 
     def _remove_redundant_punct(self, text: str) -> str:
         text_ = text
-        result = re.search(redundant_punct_pattern, text)
+        result = re.search(REDUNDANT_PUNCT_PATTERN, text)
         dif = 0
         while result:
             sub = result.group()
@@ -655,117 +771,6 @@ class ArabertPreprocessor:
                 (text_[: result.span()[0]], text_[result.span()[1] :])
             ).strip()
             dif = abs(len(text) - len(text_))
-            result = re.search(redundant_punct_pattern, text_)
+            result = re.search(REDUNDANT_PUNCT_PATTERN, text_)
         text = re.sub(r"\s+", " ", text)
         return text.strip()
-
-
-prefix_list = [
-    "ال",
-    "و",
-    "ف",
-    "ب",
-    "ك",
-    "ل",
-    "لل",
-    "\u0627\u0644",
-    "\u0648",
-    "\u0641",
-    "\u0628",
-    "\u0643",
-    "\u0644",
-    "\u0644\u0644",
-    "س",
-]
-suffix_list = [
-    "ه",
-    "ها",
-    "ك",
-    "ي",
-    "هما",
-    "كما",
-    "نا",
-    "كم",
-    "هم",
-    "هن",
-    "كن",
-    "ا",
-    "ان",
-    "ين",
-    "ون",
-    "وا",
-    "ات",
-    "ت",
-    "ن",
-    "ة",
-    "\u0647",
-    "\u0647\u0627",
-    "\u0643",
-    "\u064a",
-    "\u0647\u0645\u0627",
-    "\u0643\u0645\u0627",
-    "\u0646\u0627",
-    "\u0643\u0645",
-    "\u0647\u0645",
-    "\u0647\u0646",
-    "\u0643\u0646",
-    "\u0627",
-    "\u0627\u0646",
-    "\u064a\u0646",
-    "\u0648\u0646",
-    "\u0648\u0627",
-    "\u0627\u062a",
-    "\u062a",
-    "\u0646",
-    "\u0629",
-]
-other_tokens = ["[رابط]", "[مستخدم]", "[بريد]"]
-
-# the never_split list is ussed with the transformers library
-prefix_symbols = [x + "+" for x in prefix_list]
-suffix_symblos = ["+" + x for x in suffix_list]
-never_split_tokens = list(set(prefix_symbols + suffix_symblos + other_tokens))
-
-url_regexes = [
-    r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)",
-    r"@(https?|ftp)://(-\.)?([^\s/?\.#-]+\.?)+(/[^\s]*)?$@iS",
-    r"http[s]?://[a-zA-Z0-9_\-./~\?=%&]+",
-    r"www[a-zA-Z0-9_\-?=%&/.~]+",
-    r"[a-zA-Z]+\.com",
-    r"(?=http)[^\s]+",
-    r"(?=www)[^\s]+",
-    r"://",
-]
-user_mention_regex = r"@[\w\d]+"
-email_regexes = [r"[\w-]+@([\w-]+\.)+[\w-]+", r"\S+@\S+"]
-redundant_punct_pattern = (
-    r"([!\"#\$%\'\(\)\*\+,\.:;\-<=·>?@\[\\\]\^_ـ`{\|}~—٪’،؟`୍“؛”ۚ【»؛\s+«–…‘]{2,})"
-)
-
-regex_tatweel = r"(\D)\1{2,}"
-multiple_char_pattern = re.compile(r"(\D)\1{2,}", re.DOTALL)
-
-rejected_chars_regex = r"[^0-9\u0621-\u063A\u0640-\u066C\u0671-\u0674a-zA-Z\[\]!\"#\$%\'\(\)\*\+,\.:;\-<=·>?@\[\\\]\^_ـ`{\|}~—٪’،؟`୍“؛”ۚ»؛\s+«–…‘]"
-rejected_chars_regexv2 = r"[^0-9\u0621-\u063A\u0641-\u066C\u0671-\u0674a-zA-Z\[\]!\"#\$%\'\(\)\*\+,\.:;\-<=·>?@\[\\\]\^_ـ`{\|}~—٪’،؟`୍“؛”ۚ»؛\s+«–…‘/]"
-
-regex_url_step1 = r"(?=http)[^\s]+"
-regex_url_step2 = r"(?=www)[^\s]+"
-regex_url = r"(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)"
-regex_mention = r"@[\w\d]+"
-regex_email = r"\S+@\S+"
-
-chars_regex = r"0-9\u0621-\u063A\u0640-\u066C\u0671-\u0674a-zA-Z\[\]!\"#\$%\'\(\)\*\+,\.:;\-<=·>?@\[\\\]\^_ـ`{\|}~—٪’،؟`୍“؛”ۚ»؛\s+«–…‘"
-chars_regexv2 = r"0-9\u0621-\u063A\u0640-\u066C\u0671-\u0674a-zA-Z\[\]!\"#\$%\'\(\)\*\+,\.:;\-<=·>?@\[\\\]\^_ـ`{\|}~—٪’،؟`୍“؛”ۚ»؛\s+«–…‘/"
-
-white_spaced_double_quotation_regex = r'\"\s+([^"]+)\s+\"'
-white_spaced_single_quotation_regex = r"\'\s+([^']+)\s+\'"
-white_spaced_back_quotation_regex = r"\`\s+([^`]+)\s+\`"
-white_spaced_em_dash = r"\—\s+([^—]+)\s+\—"
-
-left_spaced_chars = r" ([\]!#\$%\),\.:;\?}٪’،؟”؛…»·])"
-right_spaced_chars = r"([\[\(\{“«‘*\~]) "
-left_and_right_spaced_chars = r" ([\+\-\<\=\>\@\\\^\_\|\–]) "
-
-hindi_nums = "٠١٢٣٤٥٦٧٨٩"
-arabic_nums = "0123456789"
-hindi_to_arabic_map = str.maketrans(hindi_nums, arabic_nums)
