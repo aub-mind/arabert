@@ -1,6 +1,7 @@
 # AraBERTv2 / AraGPT2 / AraELECTRA
 
 ![visitors](https://visitor-badge.glitch.me/badge?page_id=wissamantoun.arabert)
+[![PyPI version](https://badge.fury.io/py/arabert.svg)](https://badge.fury.io/py/arabert)
 
 <p align="middle">
   <img src="https://github.com/aub-mind/arabert/blob/master/arabert_logo.png" width="150" align="left"/>
@@ -21,9 +22,23 @@ cd arabert && git checkout 6a58ca118911ef311cbe8cdcdcc1d03601123291
 ```
 # Update
 
-- **8-Oct-2021**: New AraBERT models that better supports tweets and emojies.
+- **8-Oct-2021:** New AraBERT models that better supports tweets and emojies.
 - **13-Sep-2021:** Arabic NLP Demo Space on HuggingFace [![Open Space](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://huggingface.co/spaces/aubmindlab/Arabic-NLP)
 - **02-Apr-2021:** AraELECTRA powered Arabic Wikipedia QA system [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/wissamantoun/arabic-wikipedia-qa-streamlit/main)
+- **17-jul-2022:** You can now install arabert via `pip install arabert`
+
+# Installation
+
+Install AraBERT from PyPI:
+```bash
+pip install arabert
+```
+
+and then you can use it:
+```python
+from arabert import ArabertPreprocessor
+from arabert.aragpt2.grover.modeling_gpt2 import GPT2LMHeadModel
+```
 
 # AraBERTv2
 

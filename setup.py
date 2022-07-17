@@ -1,5 +1,36 @@
 from setuptools import find_packages, setup
 
+
+def get_long_description():
+    with open("README.md", "r", encoding="utf-8") as f:
+        long_description = f.read()
+
+    long_description = long_description.replace(
+        "[Read More...](#AraBERT)",
+        "[Read More...](https://github.com/aub-mind/arabert/tree/master/arabert)",
+    )
+    long_description = long_description.replace(
+        "[Read More...](#AraGPT2)",
+        "[Read More...](https://github.com/aub-mind/arabert/tree/master/aragpt2)",
+    )
+    long_description = long_description.replace(
+        "[Read More...](#AraELECTRA)",
+        "[Read More...](https://github.com/aub-mind/arabert/tree/master/araelectra)",
+    )
+    long_description = long_description.replace(
+        "[preprocessing function](#Preprocessing)",
+        "https://github.com/aub-mind/arabert#preprocessing",
+    )
+    long_description = long_description.replace(
+        "[Dataset Section](#Dataset)", "https://github.com/aub-mind/arabert#Dataset"
+    )
+    long_description = long_description.replace(
+        "https://github.com/aub-mind/arabert/blob/master/",
+        "https://raw.githubusercontent.com/aub-mind/arabert/master/",
+    )
+    return long_description
+
+
 setup(
     name="arabert",
     version="1.0.0",
@@ -10,7 +41,7 @@ setup(
     description="AraBERT is a Python library that contains the"
     "code for the AraBERT, AraGPT2 and AraELECTRA models with"
     "the preprocessing scripts.",
-    long_description=open("README.md", "r", encoding="utf-8").read(),
+    long_description=get_long_description(),
     long_description_content_type="text/markdown",
     install_requires=["PyArabic", "farasapy"],
     py_modules=["arabert.preprocess"],
