@@ -2,6 +2,7 @@
 
 ![visitors](https://visitor-badge.glitch.me/badge?page_id=wissamantoun.arabert)
 [![PyPI version](https://badge.fury.io/py/arabert.svg)](https://badge.fury.io/py/arabert)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/arabert)
 
 <p align="middle">
   <img src="https://github.com/aub-mind/arabert/blob/master/arabert_logo.png" width="150" align="left"/>
@@ -21,11 +22,10 @@ git clone https://github.com/aub-mind/arabert/
 cd arabert && git checkout 6a58ca118911ef311cbe8cdcdcc1d03601123291
 ```
 # Update
-
+- **17-jul-2022:** You can now install arabert via `pip install arabert`
 - **8-Oct-2021:** New AraBERT models that better supports tweets and emojies.
 - **13-Sep-2021:** Arabic NLP Demo Space on HuggingFace [![Open Space](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://huggingface.co/spaces/aubmindlab/Arabic-NLP)
 - **02-Apr-2021:** AraELECTRA powered Arabic Wikipedia QA system [![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://share.streamlit.io/wissamantoun/arabic-wikipedia-qa-streamlit/main)
-- **17-jul-2022:** You can now install arabert via `pip install arabert`
 
 # Installation
 
@@ -34,7 +34,7 @@ Install AraBERT from PyPI:
 pip install arabert
 ```
 
-and then you can use it:
+then use it as follows:
 ```python
 from arabert import ArabertPreprocessor
 from arabert.aragpt2.grover.modeling_gpt2 import GPT2LMHeadModel
@@ -57,22 +57,22 @@ More Detail in the AraBERT folder and in the [README](https://github.com/aub-min
 
  Model | HuggingFace Model Name | Size (MB/Params)| Pre-Segmentation | DataSet (Sentences/Size/nWords) |
  ---|:---:|:---:|:---:|:---:
+AraBERTv0.2-Twitter-base| [bert-base-arabertv02-twitter](https://huggingface.co/aubmindlab/bert-base-arabertv02-twitter) | 543MB / 136M | No | Same as v02 + 60M Multi-Dialect Tweets|
+AraBERTv0.2-Twitter-large| [bert-large-arabertv02-twitter](https://huggingface.co/aubmindlab/bert-large-arabertv02-twitter) | 1.38G / 371M | No | Same as v02 + 60M Multi-Dialect Tweets|
 AraBERTv0.2-base | [bert-base-arabertv02](https://huggingface.co/aubmindlab/bert-base-arabertv02) | 543MB / 136M | No | 200M / 77GB / 8.6B |
  AraBERTv0.2-large| [bert-large-arabertv02](https://huggingface.co/aubmindlab/bert-large-arabertv02) | 1.38G / 371M | No | 200M / 77GB / 8.6B |
 AraBERTv2-base| [bert-base-arabertv2](https://huggingface.co/aubmindlab/bert-base-arabertv2) | 543MB / 136M | Yes | 200M / 77GB / 8.6B |
 AraBERTv2-large| [bert-large-arabertv2](https://huggingface.co/aubmindlab/bert-large-arabertv2) | 1.38G / 371M | Yes | 200M / 77GB / 8.6B |
  AraBERTv0.1-base| [bert-base-arabertv01](https://huggingface.co/aubmindlab/bert-base-arabertv01) | 543MB / 136M | No | 77M / 23GB / 2.7B |
 AraBERTv1-base| [bert-base-arabert](https://huggingface.co/aubmindlab/bert-base-arabert) | 543MB / 136M | Yes | 77M / 23GB / 2.7B |
-AraBERTv0.2-Twitter-base| [bert-base-arabertv02-twitter](https://huggingface.co/aubmindlab/bert-base-arabertv02-twitter) | 543MB / 136M | No | Same as v02 + 60M Multi-Dialect Tweets|
- AraBERTv0.2-Twitter-large| [bert-large-arabertv02-twitter](https://huggingface.co/aubmindlab/bert-large-arabertv02-twitter) | 1.38G / 371M | No | Same as v02 + 60M Multi-Dialect Tweets|
 
 All models are available in the `HuggingFace` model page under the [aubmindlab](https://huggingface.co/aubmindlab/) name. Checkpoints are available in PyTorch, TF2 and TF1 formats.
 
 ## Better Pre-Processing and New Vocab
 
-We identified an issue with AraBERTv1's wordpiece vocabulary. The issue came from punctuations and numbers that were still attached to words when learned the wordpiece vocab. We now insert a space between numbers and characters and around punctuation characters.
+We identified an issue with AraBERTv1's wordpiece vocabulary. The issue came from punctuations and numbers that were still attached to words when we trained the wordpiece vocab. We now insert a space between numbers and characters and around punctuation characters.
 
-The new vocabulary was learnt using the `BertWordpieceTokenizer` from the `tokenizers` library, and should now support the Fast tokenizer implementation from the `transformers` library.
+The new vocabulary was learnt using the `BertWordpieceTokenizer` from the `tokenizers` library, and now supports the Fast tokenizer implementation from the `transformers` library.
 
 **P.S.**: All the old BERT codes should work with the new BERT, just change the model name and check the new preprocessing function
 

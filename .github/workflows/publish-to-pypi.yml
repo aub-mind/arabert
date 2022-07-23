@@ -1,4 +1,4 @@
-name: Publish AraBERT 📦 to TestPyPI
+name: Publish AraBERT 📦 to PyPI
 
 on: workflow_dispatch
 
