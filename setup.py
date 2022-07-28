@@ -33,7 +33,7 @@ def get_long_description():
 
 setup(
     name="arabert",
-    version="1.0.0",
+    version="1.0.1",
     author="AUB MIND Lab",
     maintainer="Wissam Antoun",
     maintainer_email="wissam.antoun@gmail.com",
@@ -43,7 +43,7 @@ setup(
     "the preprocessing scripts.",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
-    install_requires=["PyArabic", "farasapy"],
+    install_requires=["PyArabic", "farasapy", "emoji==1.4.2"],
     py_modules=["arabert.preprocess"],
     package_dir={"arabert": "."},
     packages=[
